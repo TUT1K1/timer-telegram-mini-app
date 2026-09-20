@@ -630,6 +630,8 @@
     
     function loadCustomEvents() {
       if (!tg || !tg.CloudStorage) {
+        customEvents = [];
+        renderCustomEvents();
         return;
       }
       
@@ -637,11 +639,33 @@
         STORAGE_KEY,
         (error, value) => {
           if (error) {
-            return;
-          } if (!value) {
             customEvents = [];
+            renderCustomEvents();
             return;
           }
+          
+          if (!value) {
+            customEvents = [];
+            renderCustomEvents();
+            return;
+          }
+          
+          try {
+            const parsedEvents = JSON.parse(value);
+            
+            if (Array.isArray(parsedEvents)) {
+              customEvents = parsedEvents;
+            } else {
+              customEvents = [];
+            }
+          } catch {
+            customEvents = [];
+          }
+          
+          renderCustomEvents();
+        }
+      );
+    }
           
           try {
             customEvents = JSON.parse(value);
