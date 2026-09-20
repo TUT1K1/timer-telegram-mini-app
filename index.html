@@ -628,6 +628,13 @@
     document.getElementById("customEventsButton").addEventListener("click", () => {
       showCustomScreen();
     });
+    document.getElementById("channelButton").addEventListener("click", () => {
+  if (tg && tg.openTelegramLink) {
+    tg.openTelegramLink("https://t.me/timer_new");
+  } else {
+    window.open("https://t.me/timer_new", "_blank");
+  }
+});
     const STORAGE_KEY = "custom_events";
     
     let customEvents = [];
