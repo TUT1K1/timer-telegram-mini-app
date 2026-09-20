@@ -1,1 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
+    <title>Таймер | Timer</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --card-color: #ffffff;
+            --text-color: #171717;
+            --secondary-text: #777777;
+            --orange: #ff8a00;
+            --orange-dark: #e87800;
+            --button-text: #ffffff;
+            --border-radius: 22px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Helvetica Neue",
+                Arial,
+                sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app {
+            width: 100%;
+            min-height: 100vh;
+            padding:
+                calc(24px + env(safe-area-inset-top))
+                18px
+                calc(28px + env(safe-area-inset-bottom));
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 12px 8px 24px;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .description {
+            margin: 12px auto 0;
+            max-width: 430px;
+            color: var(--secondary-text);
+            font-size: 15px;
+            line-height: 1.45;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .event-button {
+            appearance: none;
+            border: 0;
+            width: 100%;
+            min-height: 76px;
+            padding: 14px 10px;
+            border-radius: var(--border-radius);
+            background: var(--card-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 750;
+            cursor: pointer;
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.06);
+            transition:
+                transform 0.12s ease,
+                box-shadow 0.12s ease,
+                background 0.12s ease;
+        }
+
+        .event-button:active {
+            transform: scale(0.97);
+            box-shadow:
+                0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .event-button.primary {
+            background: var(--orange);
+            color: var(--button-text);
+            box-shadow:
+                0 6px 16px rgba(255, 138, 0, 0.24);
+        }
+
+        .event-button.primary:active {
+            background: var(--orange-dark);
+        }
+
+        .wide {
+            grid-column: 1 / -1;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .back-button {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            color: var(--orange-dark);
+            padding: 8px 0;
+            margin-bottom: 10px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .timer-card {
+            background: var(--card-color);
+            border-radius: 28px;
+            padding: 26px 18px 24px;
+            text-align: center;
+            box-shadow:
+                0 4px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .timer-title {
+            margin: 0 0 24px;
+            font-size: 25px;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .timer-unit {
+            min-width: 0;
+        }
+
+        .circle {
+            width: min(18vw, 82px);
+            height: min(18vw, 82px);
+            min-width: 58px;
+            min-height: 58px;
+            margin: 0 auto 8px;
+            border-radius: 50%;
+            background: var(--orange);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(18px, 5vw, 28px);
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            box-shadow:
+                0 6px 15px rgba(255, 138, 0, 0.2);
+        }
+
+        .unit-label {
+            color: var(--orange-dark);
+            font-size: 12px;
+            font-weight: 750;
+            text-transform: uppercase;
+        }
+
+        .event-date {
+            margin-top: 26px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(127, 127, 127, 0.15);
+            color: var(--secondary-text);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #171717;
+                --card-color: #242424;
+                --text-color: #ffffff;
+                --secondary-text: #a7a7a7;
+            }
+
+            .event-button {
+                box-shadow:
+                    0 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .timer-card {
+                box-shadow:
+                    0 4px 18px rgba(0, 0, 0, 0.22);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+        <div class="container">
+
+            <section id="homeScreen" class="screen active">
+                <header class="header">
+                    <h1 class="title">Таймер | Timer</h1>
+
+                    <p class="description">
+                        Следите за тем, сколько времени осталось
+                        до важных событий.
+                    </p>
+                </header>
+
+                <div class="buttons">
+                    <button
+                        class="event-button"
+                        type="button"
+                        data-event="winter"
+                    >
+                        ЗИМА
+                    </button>
+
+                    <button
+                        class="event-button"
+                        type="button"
+                        data-event="spring"
+                    >
+                        ВЕСНА
+                    </button>
+
+                    <button
+                        class="event-button"
+                        type="button"
+                        data-event="summer"
+                    >
+                        ЛЕТО
+                    </button>
+
+                    <button
+                        class="event-button"
+                        type="button"
+                        data-event="autumn"
+                    >
+                        ОСЕНЬ
+                    </button>
+
+                    <button
+                        class="event-button primary wide"
+                        type="button"
+                        data-event="new-year"
+                    >
+                        НОВЫЙ ГОД
+                    </button>
+
+                    <button
+                        class="event-button primary wide"
+                        type="button"
+                        data-event="custom"
+                    >
+                        ДОБАВИТЬ СОБЫТИЕ
+                    </button>
+                </div>
+            </section>
+
+            <section id="timerScreen" class="screen">
+                <button
+                    id="backButton"
+                    class="back-button"
+                    type="button"
+                >
+                    ← Назад
+                </button>
+
+                <div class="timer-card">
+                    <h2 id="timerTitle" class="timer-title">
+                        До события осталось
+                    </h2>
+
+                    <div class="timer-grid">
+                        <div class="timer-unit">
+                            <div id="days" class="circle">0</div>
+                            <div class="unit-label">Дней</div>
+                        </div>
+
+                        <div class="timer-unit">
+                            <div id="hours" class="circle">0</div>
+                            <div class="unit-label">Часов</div>
+                        </div>
+
+                        <div class="timer-unit">
+                            <div id="minutes" class="circle">0</div>
+                            <div class="unit-label">Минут</div>
+                        </div>
+
+                        <div class="timer-unit">
+                            <div id="seconds" class="circle">0</div>
+                            <div class="unit-label">Секунд</div>
+                        </div>
+                    </div>
+
+                    <div class="event-date">
+                        ДАТА СОБЫТИЯ:
+                        <strong id="eventDate">—</strong>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        "use strict";
+
+        const tg = window.Telegram?.WebApp;
+
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        const events = {
+            winter: {
+                name: "ЗИМА",
+                month: 12,
+                day: 1
+            },
+
+            spring: {
+                name: "ВЕСНА",
+                month: 3,
+                day: 1
+            },
+
+            summer: {
+                name: "ЛЕТО",
+                month: 6,
+                day: 1
+            },
+
+            autumn: {
+                name: "ОСЕНЬ",
+                month: 9,
+                day: 1
+            },
+
+            "new-year": {
+                name: "НОВЫЙ ГОД",
+                month: 1,
+                day: 1
+            }
+        };
+
+        const homeScreen = document.getElementById("homeScreen");
+        const timerScreen = document.getElementById("timerScreen");
+        const timerTitle = document.getElementById("timerTitle");
+        const eventDate = document.getElementById("eventDate");
+
+        const daysElement = document.getElementById("days");
+        const hoursElement = document.getElementById("hours");
+        const minutesElement = document.getElementById("minutes");
+        const secondsElement = document.getElementById("seconds");
+
+        const backButton = document.getElementById("backButton");
+
+        let timerInterval = null;
+
+        function getMoscowDateParts() {
+            const formatter = new Intl.DateTimeFormat(
+                "en-CA",
+                {
+                    timeZone: "Europe/Moscow",
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
+                }
+            );
+
+            const parts = formatter.formatToParts(new Date());
+
+            const result = {};
+
+            for (const part of parts) {
+                if (part.type !== "literal") {
+                    result[part.type] = Number(part.value);
+                }
+            }
+
+            return result;
+        }
+
+        function getNextEventTimestamp(month, day) {
+            const nowParts = getMoscowDateParts();
+
+            let year = nowParts.year;
+
+            let target = Date.UTC(
+                year,
+                month - 1,
+                day,
+                0,
+                0,
+                0
+            );
+
+            const currentMoscowDate = Date.UTC(
+                nowParts.year,
+                nowParts.month - 1,
+                nowParts.day,
+                0,
+                0,
+                0
+            );
+
+            if (target < currentMoscowDate) {
+                year += 1;
+
+                target = Date.UTC(
+                    year,
+                    month - 1,
+                    day,
+                    0,
+                    0,
+                    0
+                );
+            }
+
+            return target;
+        }
+
+        function formatEventDate(timestamp) {
+            return new Intl.DateTimeFormat(
+                "ru-RU",
+                {
+                    timeZone: "Europe/Moscow",
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                }
+            ).format(new Date(timestamp));
+        }
+
+        function updateTimer(timestamp) {
+            const now = Date.now();
+            let difference = timestamp - now;
+
+            if (difference < 0) {
+                difference = 0;
+            }
+
+            const totalSeconds = Math.floor(
+                difference / 1000
+            );
+
+            const days = Math.floor(
+                totalSeconds / 86400
+            );
+
+            const hours = Math.floor(
+                (totalSeconds % 86400) / 3600
+            );
+
+            const minutes = Math.floor(
+                (totalSeconds % 3600) / 60
+            );
+
+            const seconds = totalSeconds % 60;
+
+            daysElement.textContent = String(days);
+            hoursElement.textContent = String(hours).padStart(2, "0");
+            minutesElement.textContent = String(minutes).padStart(2, "0");
+            secondsElement.textContent = String(seconds).padStart(2, "0");
+        }
+
+        function openBuiltInEvent(eventKey) {
+            const event = events[eventKey];
+
+            if (!event) {
+                return;
+            }
+
+            const timestamp = getNextEventTimestamp(
+                event.month,
+                event.day
+            );
+
+            timerTitle.textContent =
+                `ДО ${event.name} ОСТАЛОСЬ`;
+
+            eventDate.textContent =
+                formatEventDate(timestamp);
+
+            homeScreen.classList.remove("active");
+            timerScreen.classList.add("active");
+
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+            }
+
+            updateTimer(timestamp);
+
+            timerInterval = setInterval(() => {
+                updateTimer(timestamp);
+            }, 1000);
+        }
+
+        function showHomeScreen() {
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            timerScreen.classList.remove("active");
+            homeScreen.classList.add("active");
+        }
+
+        document
+            .querySelectorAll("[data-event]")
+            .forEach((button) => {
+                button.addEventListener("click", () => {
+                    const eventKey =
+                        button.dataset.event;
+
+                    if (events[eventKey]) {
+                        openBuiltInEvent(eventKey);
+                    }
+                });
+            });
+
+        backButton.addEventListener(
+            "click",
+            showHomeScreen
+        );
+    </script>
+</body>
+</html>
