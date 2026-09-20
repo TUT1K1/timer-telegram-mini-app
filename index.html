@@ -221,6 +221,11 @@
   outline: none;
 }
 
+  .custom-form input[type="date"] {
+    width: 100%;
+    display: block;
+}
+
 .custom-form input[type="text"]:focus,
 .custom-form input[type="date"]:focus {
   border-color: var(--orange);
@@ -408,10 +413,13 @@
   <script>
     const tg = window.Telegram?.WebApp;
 
-    if (tg) {
-      tg.ready();
-      tg.expand();
-    }
+if (tg) {
+  tg.ready();
+  tg.expand();
+
+  tg.setBackgroundColor("#fff7ed");
+  tg.setHeaderColor("#fff7ed");
+}
 
     /*
       ВАЖНО:
