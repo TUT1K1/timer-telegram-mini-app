@@ -705,13 +705,26 @@
             ${escapeHtml(event.date)}
           </div>
           
-          <button
-            class="menu-button"
-            style="width:100%; min-height:52px;"
-            data-custom-event="${index}"
-          >
-            ОТКРЫТЬ
-          </button>
+          <div style="
+  display:flex;
+  gap:10px;
+">
+  <button
+    class="menu-button"
+    style="flex:1; min-height:52px;"
+    data-custom-event="${index}"
+  >
+    ОТКРЫТЬ
+  </button>
+
+  <button
+    class="menu-button"
+    style="flex:1; min-height:52px; background:#dc2626;"
+    data-delete-event="${index}"
+  >
+    УДАЛИТЬ
+  </button>
+</div>
           `;
           
           list.appendChild(item);
@@ -724,6 +737,30 @@
               openCustomEvent(
                 Number(button.dataset.customEvent)
               );
+            });
+          });
+        document
+          .querySelectorAll("[data-delete-event]")
+          .forEach(button => {
+            button.addEventListener("click", () => {
+              const index = Number(button.dataset.deleteEvent);
+
+              if (!customEvents[index]) {
+                return;
+              }
+
+              const confirmed = confirm(
+                `Удалить событие «${customEvents[index].name}»?`
+              );
+
+              if (!confirmed) {
+                return;
+              }
+
+              customEvents.splice(index, 1);
+
+              saveCustomEvents();
+              renderCustomEvents();
             });
           });
     }
