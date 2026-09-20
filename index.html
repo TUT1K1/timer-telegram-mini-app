@@ -195,6 +195,61 @@
       font-size: 20px;
     }
 
+    .custom-form {
+  margin-top: 10px;
+}
+
+.custom-form label {
+  display: block;
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.custom-form input[type="text"],
+.custom-form input[type="date"] {
+  width: 100%;
+  height: 54px;
+  margin-bottom: 20px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--white);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+.custom-form input[type="text"]:focus,
+.custom-form input[type="date"]:focus {
+  border-color: var(--orange);
+}
+
+.repeat-row {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 54px;
+  margin-bottom: 22px !important;
+  padding: 0 16px;
+  border-radius: 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+}
+
+.repeat-row input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--orange);
+}
+
+.save-button {
+  width: 100%;
+  margin-top: 4px;
+}
+    
     @media (max-width: 380px) {
       .circle {
         width: 92px;
@@ -291,13 +346,42 @@
     </section>
 
     <section id="customScreen" class="screen">
-      <button class="back-button" id="customBackButton">← НАЗАД</button>
+  <button class="back-button" id="customBackButton">← НАЗАД</button>
 
-      <div class="empty-message">
-        <strong>Пользовательские события</strong>
-        Функция создания и сохранения событий будет добавлена следующим этапом.
-      </div>
-    </section>
+  <h2 class="event-title">ДОБАВИТЬ СОБЫТИЕ</h2>
+
+  <div class="custom-form">
+
+    <label for="eventName">Название события</label>
+    <input
+      type="text"
+      id="eventName"
+      placeholder="Например: День рождения"
+      maxlength="100"
+    >
+
+    <label for="eventDateInput">Дата события</label>
+    <input
+      type="date"
+      id="eventDateInput"
+    >
+
+    <label class="repeat-row">
+      <span>Повторять каждый год</span>
+      <input
+        type="checkbox"
+        id="repeatYearly"
+      >
+    </label>
+
+    <button class="menu-button save-button" id="saveEventButton">
+      СОХРАНИТЬ
+    </button>
+
+  </div>
+
+  <div id="customEventsList"></div>
+</section>
 
   </main>
 
@@ -524,6 +608,210 @@
     document.getElementById("customEventsButton").addEventListener("click", () => {
       showCustomScreen();
     });
+    const STORAGE_KEY = "custom_events";
+    
+    let customEvents = [];
+    
+    function saveCustomEvents() {
+      if (!tg || !tg.CloudStorage) {
+        return;
+      }
+      
+      tg.CloudStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(customEvents),
+        (error) => {
+          if (error) {
+            alert("Не удалось сохранить событие. Попробуйте ещё раз.");
+          }
+        }
+      );
+    }
+    
+    function loadCustomEvents() {
+      if (!tg || !tg.CloudStorage) {
+        return;
+      }
+      
+      tg.CloudStorage.getItem(
+        STORAGE_KEY,
+        (error, value) => {
+          if (error) {
+            return;
+          } if (!value) {
+            customEvents = [];
+            return;
+          }
+          
+          try {
+            customEvents = JSON.parse(value);
+            
+            if (!Array.isArray(customEvents)) {
+              customEvents = [];
+            }
+          } catch {
+            customEvents = [];
+          }
+        }
+      );
+    }
+    
+    function renderCustomEvents() {
+      const list = document.getElementById("customEventsList");
+      
+      if (!list) {
+        return;
+      }
+      
+      list.innerHTML = "";
+      
+      if (customEvents.length === 0) {
+        return;
+      }
+      
+      customEvents.forEach((event, index) => {
+        const item = document.createElement("div");
+        
+        item.style.marginTop = "16px";
+        item.style.padding = "18px";
+        item.style.borderRadius = "18px";
+        item.style.background = "var(--white)";
+        item.style.border = "1px solid var(--border)";
+        
+        item.innerHTML = `
+          <div style="
+            font-size: 19px;
+            font-weight: 900;
+            margin-bottom: 8px;
+          ">
+            ${escapeHtml(event.name)}
+          </div>
+            
+          <div style="
+            color: var(--muted);
+            margin-bottom: 14px;
+          ">
+            ${escapeHtml(event.date)}
+          </div>
+          
+          <button
+            class="menu-button"
+            style="width:100%; min-height:52px;"
+            data-custom-event="${index}"
+          >
+            ОТКРЫТЬ
+          </button>
+          `;
+          
+          list.appendChild(item);
+        });
+        
+        document
+          .querySelectorAll("[data-custom-event]")
+          .forEach(button => {
+            button.addEventListener("click", () => {
+              openCustomEvent(
+                Number(button.dataset.customEvent)
+              );
+            });
+          });
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function openCustomEvent(index) {
+      const event = customEvents[index];
+      
+      if (!event) {
+        return;
+      }
+      
+      const [year, month, day] = event.date
+        .split("-")
+        .map(Number);
+      
+      let targetYear = year;
+      
+      let timestamp = getMoscowMidnightTimestamp(
+        targetYear,
+        month,
+        day
+      );
+      
+      if (event.repeatYearly) {
+        while (timestamp <= Date.now()) {
+          targetYear++;
+          
+          timestamp = getMoscowMidnightTimestamp(
+            targetYear,
+            month,
+            day
+          );
+        }
+      }
+      
+      currentTimer = timestamp;
+      
+      document.getElementById("eventTitle").textContent =
+        `ДО ${event.name.toUpperCase()} ОСТАЛОСЬ`;
+      document.getElementById("eventDate").textContent =
+        formatEventDate(timestamp);
+      
+      document.getElementById("customScreen").classList.remove("active");
+      document.getElementById("homeScreen").classList.remove("active");
+      document.getElementById("timerScreen").classList.add("active");
+      
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+      
+      updateTimer(currentTimer);
+      
+      timerInterval = setInterval(() => {
+        updateTimer(currentTimer);
+      }, 250);
+    }
+    
+    document.getElementById("saveEventButton").addEventListener("click", () => {
+      const nameInput = document.getElementById("eventName");
+      const dateInput = document.getElementById("eventDateInput");
+      const repeatInput = document.getElementById("repeatYearly");
+      
+      const name = nameInput.value.trim();
+      const date = dateInput.value;
+      const repeatYearly = repeatInput.checked;
+      
+      if (!name) {
+        alert("Введите название события.");
+        return;
+      }
+      
+      if (!date) {
+        alert("Выберите дату события.");
+        return;
+      }
+      
+      customEvents.push({
+        name: name,
+        date: date,
+        repeatYearly: repeatYearly
+      });
+      
+      saveCustomEvents();
+      
+      nameInput.value = "";
+      dateInput.value = "";
+      repeatInput.checked = false;
+      
+      renderCustomEvents();
+    });
+    
+    loadCustomEvents();
+    renderCustomEvents();
   </script>
 </body>
 </html>
