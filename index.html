@@ -1,576 +1,529 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f97316">
+  <title>Таймер | Timer</title>
 
-    <title>Таймер | Timer</title>
+  <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
 
-    <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+  <style>
+    :root {
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --bg: #fff7ed;
+      --text: #1c1917;
+      --muted: #78716c;
+      --white: #ffffff;
+      --border: #fed7aa;
+    }
 
-    <style>
-        :root {
-            --bg-color: #f4f4f4;
-            --card-color: #ffffff;
-            --text-color: #171717;
-            --secondary-text: #777777;
-            --orange: #ff8a00;
-            --orange-dark: #e87800;
-            --button-text: #ffffff;
-            --border-radius: 22px;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
 
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100%;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px 16px;
+    }
 
-        body {
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
-                "Helvetica Neue",
-                Arial,
-                sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+    .app {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
 
-        .app {
-            width: 100%;
-            min-height: 100vh;
-            padding:
-                calc(24px + env(safe-area-inset-top))
-                18px
-                calc(28px + env(safe-area-inset-bottom));
-        }
+    .screen {
+      display: none;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 520px;
-            margin: 0 auto;
-        }
+    .screen.active {
+      display: block;
+    }
 
-        .header {
-            text-align: center;
-            padding: 12px 8px 24px;
-        }
+    h1 {
+      margin: 0 0 10px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+    }
 
-        .title {
-            margin: 0;
-            font-size: 30px;
-            line-height: 1.1;
-            font-weight: 800;
-            letter-spacing: -0.8px;
-        }
+    .description {
+      margin: 0 auto 28px;
+      max-width: 430px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.45;
+    }
 
-        .description {
-            margin: 12px auto 0;
-            max-width: 430px;
-            color: var(--secondary-text);
-            font-size: 15px;
-            line-height: 1.45;
-        }
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-        }
+    button {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        .event-button {
-            appearance: none;
-            border: 0;
-            width: 100%;
-            min-height: 76px;
-            padding: 14px 10px;
-            border-radius: var(--border-radius);
-            background: var(--card-color);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 17px;
-            font-weight: 750;
-            cursor: pointer;
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.06);
-            transition:
-                transform 0.12s ease,
-                box-shadow 0.12s ease,
-                background 0.12s ease;
-        }
+    .menu-button {
+      min-height: 64px;
+      padding: 12px;
+      border-radius: 18px;
+      background: var(--orange);
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 800;
+      box-shadow: 0 5px 14px rgba(249, 115, 22, 0.20);
+    }
 
-        .event-button:active {
-            transform: scale(0.97);
-            box-shadow:
-                0 1px 4px rgba(0, 0, 0, 0.05);
-        }
+    .menu-button:active {
+      transform: scale(0.98);
+      background: var(--orange-dark);
+    }
 
-        .event-button.primary {
-            background: var(--orange);
-            color: var(--button-text);
-            box-shadow:
-                0 6px 16px rgba(255, 138, 0, 0.24);
-        }
+    .menu-button.wide {
+      grid-column: 1 / 3;
+      width: 50%;
+      justify-self: center;
+    }
 
-        .event-button.primary:active {
-            background: var(--orange-dark);
-        }
+    .back-button {
+      margin-bottom: 24px;
+      padding: 10px 16px;
+      border-radius: 14px;
+      background: var(--white);
+      color: var(--orange-dark);
+      border: 1px solid var(--border);
+      font-weight: 700;
+    }
 
-        .wide {
-            grid-column: 1 / -1;
-        }
+    .event-title {
+      margin: 10px 0 30px;
+      text-align: center;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
 
-        .screen {
-            display: none;
-        }
+    .timer {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: start;
+    }
 
-        .screen.active {
-            display: block;
-        }
+    .timer-unit.days {
+      grid-column: 1 / 4;
+      margin-bottom: 8px;
+    }
 
-        .back-button {
-            appearance: none;
-            border: 0;
-            background: transparent;
-            color: var(--orange-dark);
-            padding: 8px 0;
-            margin-bottom: 10px;
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-        }
+    .circle {
+      width: 112px;
+      height: 112px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background: var(--orange);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 7px 20px rgba(249, 115, 22, 0.22);
+    }
 
-        .timer-card {
-            background: var(--card-color);
-            border-radius: 28px;
-            padding: 26px 18px 24px;
-            text-align: center;
-            box-shadow:
-                0 4px 18px rgba(0, 0, 0, 0.06);
-        }
+    .days .circle {
+      width: 138px;
+      height: 138px;
+    }
 
-        .timer-title {
-            margin: 0 0 24px;
-            font-size: 25px;
-            line-height: 1.2;
-            font-weight: 800;
-        }
+    .value {
+      font-size: 38px;
+      line-height: 1;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
 
-        .timer-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
+    .days .value {
+      font-size: 46px;
+    }
 
-        .timer-unit {
-            min-width: 0;
-        }
+    .label {
+      margin-top: 7px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
 
-        .circle {
-            width: min(18vw, 82px);
-            height: min(18vw, 82px);
-            min-width: 58px;
-            min-height: 58px;
-            margin: 0 auto 8px;
-            border-radius: 50%;
-            background: var(--orange);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(18px, 5vw, 28px);
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-            box-shadow:
-                0 6px 15px rgba(255, 138, 0, 0.2);
-        }
+    .event-date {
+      margin-top: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 700;
+    }
 
-        .unit-label {
-            color: var(--orange-dark);
-            font-size: 12px;
-            font-weight: 750;
-            text-transform: uppercase;
-        }
+    .empty-message {
+      padding: 28px 20px;
+      border-radius: 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
-        .event-date {
-            margin-top: 26px;
-            padding-top: 18px;
-            border-top: 1px solid rgba(127, 127, 127, 0.15);
-            color: var(--secondary-text);
-            font-size: 14px;
-            line-height: 1.4;
-        }
+    .empty-message strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 20px;
+    }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #171717;
-                --card-color: #242424;
-                --text-color: #ffffff;
-                --secondary-text: #a7a7a7;
-            }
+    @media (max-width: 380px) {
+      .circle {
+        width: 92px;
+        height: 92px;
+      }
 
-            .event-button {
-                box-shadow:
-                    0 2px 8px rgba(0, 0, 0, 0.2);
-            }
+      .days .circle {
+        width: 118px;
+        height: 118px;
+      }
 
-            .timer-card {
-                box-shadow:
-                    0 4px 18px rgba(0, 0, 0, 0.22);
-            }
-        }
-    </style>
+      .value {
+        font-size: 31px;
+      }
+
+      .days .value {
+        font-size: 39px;
+      }
+
+      .event-title {
+        font-size: 24px;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1917;
+        --text: #fafaf9;
+        --muted: #a8a29e;
+        --white: #292524;
+        --border: #7c2d12;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <main class="app">
-        <div class="container">
+  <main class="app">
 
-            <section id="homeScreen" class="screen active">
-                <header class="header">
-                    <h1 class="title">Таймер | Timer</h1>
+    <section id="homeScreen" class="screen active">
+      <h1>Таймер | Timer</h1>
 
-                    <p class="description">
-                        Следите за тем, сколько времени осталось
-                        до важных событий.
-                    </p>
-                </header>
+      <p class="description">
+        Узнайте, сколько времени осталось до любимого времени года,
+        Нового года или создайте собственное событие.
+      </p>
 
-                <div class="buttons">
-                    <button
-                        class="event-button"
-                        type="button"
-                        data-event="winter"
-                    >
-                        ЗИМА
-                    </button>
+      <div class="menu">
+        <button class="menu-button" data-event="winter">ЗИМА</button>
+        <button class="menu-button" data-event="spring">ВЕСНА</button>
+        <button class="menu-button" data-event="summer">ЛЕТО</button>
+        <button class="menu-button" data-event="autumn">ОСЕНЬ</button>
+        <button class="menu-button wide" data-event="new-year">НОВЫЙ ГОД</button>
+        <button class="menu-button wide" id="customEventsButton">ДОБАВИТЬ СОБЫТИЕ</button>
+      </div>
+    </section>
 
-                    <button
-                        class="event-button"
-                        type="button"
-                        data-event="spring"
-                    >
-                        ВЕСНА
-                    </button>
+    <section id="timerScreen" class="screen">
+      <button class="back-button" id="backButton">← НАЗАД</button>
 
-                    <button
-                        class="event-button"
-                        type="button"
-                        data-event="summer"
-                    >
-                        ЛЕТО
-                    </button>
+      <h2 class="event-title" id="eventTitle"></h2>
 
-                    <button
-                        class="event-button"
-                        type="button"
-                        data-event="autumn"
-                    >
-                        ОСЕНЬ
-                    </button>
-
-                    <button
-                        class="event-button primary wide"
-                        type="button"
-                        data-event="new-year"
-                    >
-                        НОВЫЙ ГОД
-                    </button>
-
-                    <button
-                        class="event-button primary wide"
-                        type="button"
-                        data-event="custom"
-                    >
-                        ДОБАВИТЬ СОБЫТИЕ
-                    </button>
-                </div>
-            </section>
-
-            <section id="timerScreen" class="screen">
-                <button
-                    id="backButton"
-                    class="back-button"
-                    type="button"
-                >
-                    ← Назад
-                </button>
-
-                <div class="timer-card">
-                    <h2 id="timerTitle" class="timer-title">
-                        До события осталось
-                    </h2>
-
-                    <div class="timer-grid">
-                        <div class="timer-unit">
-                            <div id="days" class="circle">0</div>
-                            <div class="unit-label">Дней</div>
-                        </div>
-
-                        <div class="timer-unit">
-                            <div id="hours" class="circle">0</div>
-                            <div class="unit-label">Часов</div>
-                        </div>
-
-                        <div class="timer-unit">
-                            <div id="minutes" class="circle">0</div>
-                            <div class="unit-label">Минут</div>
-                        </div>
-
-                        <div class="timer-unit">
-                            <div id="seconds" class="circle">0</div>
-                            <div class="unit-label">Секунд</div>
-                        </div>
-                    </div>
-
-                    <div class="event-date">
-                        ДАТА СОБЫТИЯ:
-                        <strong id="eventDate">—</strong>
-                    </div>
-                </div>
-            </section>
-
+      <div class="timer">
+        <div class="timer-unit days">
+          <div class="circle">
+            <div class="value" id="daysValue">0</div>
+            <div class="label">ДНЕЙ</div>
+          </div>
         </div>
-    </main>
 
-    <script>
-        "use strict";
+        <div class="timer-unit">
+          <div class="circle">
+            <div class="value" id="hoursValue">0</div>
+            <div class="label">ЧАСОВ</div>
+          </div>
+        </div>
 
-        const tg = window.Telegram?.WebApp;
+        <div class="timer-unit">
+          <div class="circle">
+            <div class="value" id="minutesValue">0</div>
+            <div class="label">МИНУТ</div>
+          </div>
+        </div>
 
-        if (tg) {
-            tg.ready();
-            tg.expand();
+        <div class="timer-unit">
+          <div class="circle">
+            <div class="value" id="secondsValue">0</div>
+            <div class="label">СЕКУНД</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-date" id="eventDate"></div>
+    </section>
+
+    <section id="customScreen" class="screen">
+      <button class="back-button" id="customBackButton">← НАЗАД</button>
+
+      <div class="empty-message">
+        <strong>Пользовательские события</strong>
+        Функция создания и сохранения событий будет добавлена следующим этапом.
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    /*
+      ВАЖНО:
+      Date.now() всегда возвращает абсолютное текущее время.
+      Мы НЕ прибавляем к нему +3 часа.
+
+      Москва = UTC+3.
+      Поэтому +3 часа используется только при построении
+      московской полуночи для даты события.
+    */
+
+    const MOSCOW_OFFSET_MS = 3 * 60 * 60 * 1000;
+
+    const events = {
+      winter: {
+        name: "ЗИМЫ",
+        month: 12,
+        day: 1
+      },
+
+      spring: {
+        name: "ВЕСНЫ",
+        month: 3,
+        day: 1
+      },
+
+      summer: {
+        name: "ЛЕТА",
+        month: 6,
+        day: 1
+      },
+
+      autumn: {
+        name: "ОСЕНИ",
+        month: 9,
+        day: 1
+      },
+
+      "new-year": {
+        name: "НОВОГО ГОДА",
+        month: 1,
+        day: 1
+      }
+    };
+
+    let currentTimer = null;
+    let timerInterval = null;
+
+    /*
+      Получаем текущую календарную дату именно в Москве.
+      Здесь мы не изменяем реальный timestamp.
+    */
+    function getMoscowDateParts() {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Europe/Moscow",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(new Date());
+
+      const result = {};
+
+      for (const part of parts) {
+        if (part.type !== "literal") {
+          result[part.type] = part.value;
         }
+      }
 
-        const events = {
-            winter: {
-                name: "ЗИМЫ",
-                month: 12,
-                day: 1
-            },
+      return {
+        year: Number(result.year),
+        month: Number(result.month),
+        day: Number(result.day)
+      };
+    }
 
-            spring: {
-                name: "ВЕСНЫ",
-                month: 3,
-                day: 1
-            },
+    /*
+      Возвращает настоящий Unix timestamp московской полуночи.
 
-            summer: {
-                name: "ЛЕТА",
-                month: 6,
-                day: 1
-            },
+      Например:
+      2026-09-21 00:00 по Москве
+      = 2026-09-20 21:00 UTC.
+    */
+    function getMoscowMidnightTimestamp(year, month, day) {
+      return Date.UTC(year, month - 1, day) - MOSCOW_OFFSET_MS;
+    }
 
-            autumn: {
-                name: "ОСЕНИ",
-                month: 9,
-                day: 1
-            },
+    /*
+      Находит ближайшее наступление события.
+    */
+    function getNextEventTimestamp(month, day) {
+      const moscowDate = getMoscowDateParts();
 
-            "new-year": {
-                name: "НОВОГО ГОДА",
-                month: 1,
-                day: 1
-            }
-        };
+      let targetTimestamp = getMoscowMidnightTimestamp(
+        moscowDate.year,
+        month,
+        day
+      );
 
-        const homeScreen = document.getElementById("homeScreen");
-        const timerScreen = document.getElementById("timerScreen");
-        const timerTitle = document.getElementById("timerTitle");
-        const eventDate = document.getElementById("eventDate");
-
-        const daysElement = document.getElementById("days");
-        const hoursElement = document.getElementById("hours");
-        const minutesElement = document.getElementById("minutes");
-        const secondsElement = document.getElementById("seconds");
-
-        const backButton = document.getElementById("backButton");
-
-        let timerInterval = null;
-
-        function getMoscowDateParts() {
-            const formatter = new Intl.DateTimeFormat(
-                "en-CA",
-                {
-                    timeZone: "Europe/Moscow",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit"
-                }
-            );
-
-            const parts = formatter.formatToParts(new Date());
-
-            const result = {};
-
-            for (const part of parts) {
-                if (part.type !== "literal") {
-                    result[part.type] = Number(part.value);
-                }
-            }
-
-            return result;
-        }
-
-        function getNextEventTimestamp(month, day) {
-            const nowParts = getMoscowDateParts();
-
-            let year = nowParts.year;
-
-            let target = Date.UTC(
-                year,
-                month - 1,
-                day,
-                0,
-                0,
-                0
-            );
-
-            const currentMoscowDate = Date.UTC(
-                nowParts.year,
-                nowParts.month - 1,
-                nowParts.day,
-                0,
-                0,
-                0
-            );
-
-            if (target < currentMoscowDate) {
-                year += 1;
-
-                target = Date.UTC(
-                    year,
-                    month - 1,
-                    day,
-                    0,
-                    0,
-                    0
-                );
-            }
-
-            return target;
-        }
-
-        function formatEventDate(timestamp) {
-            return new Intl.DateTimeFormat(
-                "ru-RU",
-                {
-                    timeZone: "Europe/Moscow",
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                }
-            ).format(new Date(timestamp));
-        }
-
-        function updateTimer(timestamp) {
-            const now = Date.now();
-            let difference = timestamp - now;
-
-            if (difference < 0) {
-                difference = 0;
-            }
-
-            const totalSeconds = Math.floor(
-                difference / 1000
-            );
-
-            const days = Math.floor(
-                totalSeconds / 86400
-            );
-
-            const hours = Math.floor(
-                (totalSeconds % 86400) / 3600
-            );
-
-            const minutes = Math.floor(
-                (totalSeconds % 3600) / 60
-            );
-
-            const seconds = totalSeconds % 60;
-
-            daysElement.textContent = String(days);
-            hoursElement.textContent = String(hours).padStart(2, "0");
-            minutesElement.textContent = String(minutes).padStart(2, "0");
-            secondsElement.textContent = String(seconds).padStart(2, "0");
-        }
-
-        function openBuiltInEvent(eventKey) {
-            const event = events[eventKey];
-
-            if (!event) {
-                return;
-            }
-
-            const timestamp = getNextEventTimestamp(
-                event.month,
-                event.day
-            );
-
-            timerTitle.textContent =
-                `ДО ${event.name} ОСТАЛОСЬ`;
-
-            eventDate.textContent =
-                formatEventDate(timestamp);
-
-            homeScreen.classList.remove("active");
-            timerScreen.classList.add("active");
-
-            if (timerInterval !== null) {
-                clearInterval(timerInterval);
-            }
-
-            updateTimer(timestamp);
-
-            timerInterval = setInterval(() => {
-                updateTimer(timestamp);
-            }, 1000);
-        }
-
-        function showHomeScreen() {
-            if (timerInterval !== null) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-
-            timerScreen.classList.remove("active");
-            homeScreen.classList.add("active");
-        }
-
-        document
-            .querySelectorAll("[data-event]")
-            .forEach((button) => {
-                button.addEventListener("click", () => {
-                    const eventKey =
-                        button.dataset.event;
-
-                    if (events[eventKey]) {
-                        openBuiltInEvent(eventKey);
-                    }
-                });
-            });
-
-        backButton.addEventListener(
-            "click",
-            showHomeScreen
+      /*
+        Если событие уже наступило в этом году,
+        берём его дату в следующем году.
+      */
+      if (targetTimestamp <= Date.now()) {
+        targetTimestamp = getMoscowMidnightTimestamp(
+          moscowDate.year + 1,
+          month,
+          day
         );
-    </script>
+      }
+
+      return targetTimestamp;
+    }
+
+    function formatEventDate(timestamp) {
+      return new Intl.DateTimeFormat("ru-RU", {
+        timeZone: "Europe/Moscow",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(new Date(timestamp));
+    }
+
+    /*
+      Считаем оставшееся время напрямую от настоящего момента
+      до московской полуночи.
+    */
+    function updateTimer(timestamp) {
+      const difference = Math.max(0, timestamp - Date.now());
+
+      const totalSeconds = Math.floor(difference / 1000);
+
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      document.getElementById("daysValue").textContent = days;
+      document.getElementById("hoursValue").textContent = hours;
+      document.getElementById("minutesValue").textContent = minutes;
+      document.getElementById("secondsValue").textContent = seconds;
+    }
+
+    function openBuiltInEvent(eventKey) {
+      const event = events[eventKey];
+
+      if (!event) {
+        return;
+      }
+
+      const timestamp = getNextEventTimestamp(
+        event.month,
+        event.day
+      );
+
+      currentTimer = timestamp;
+
+      document.getElementById("eventTitle").textContent =
+        `ДО ${event.name} ОСТАЛОСЬ`;
+
+      document.getElementById("eventDate").textContent =
+        formatEventDate(timestamp);
+
+      document.getElementById("homeScreen").classList.remove("active");
+      document.getElementById("customScreen").classList.remove("active");
+      document.getElementById("timerScreen").classList.add("active");
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+
+      updateTimer(currentTimer);
+
+      timerInterval = setInterval(() => {
+        updateTimer(currentTimer);
+      }, 250);
+    }
+
+    function showHomeScreen() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      document.getElementById("timerScreen").classList.remove("active");
+      document.getElementById("customScreen").classList.remove("active");
+      document.getElementById("homeScreen").classList.add("active");
+    }
+
+    function showCustomScreen() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      document.getElementById("homeScreen").classList.remove("active");
+      document.getElementById("timerScreen").classList.remove("active");
+      document.getElementById("customScreen").classList.add("active");
+    }
+
+    document.querySelectorAll("[data-event]").forEach(button => {
+      button.addEventListener("click", () => {
+        openBuiltInEvent(button.dataset.event);
+      });
+    });
+
+    document.getElementById("backButton").addEventListener("click", () => {
+      showHomeScreen();
+    });
+
+    document.getElementById("customBackButton").addEventListener("click", () => {
+      showHomeScreen();
+    });
+
+    document.getElementById("customEventsButton").addEventListener("click", () => {
+      showCustomScreen();
+    });
+  </script>
 </body>
 </html>
