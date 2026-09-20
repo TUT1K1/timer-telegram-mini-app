@@ -629,56 +629,43 @@
     }
     
     function loadCustomEvents() {
-      if (!tg || !tg.CloudStorage) {
+  if (!tg || !tg.CloudStorage) {
+    customEvents = [];
+    renderCustomEvents();
+    return;
+  }
+
+  tg.CloudStorage.getItem(
+    STORAGE_KEY,
+    (error, value) => {
+      if (error) {
         customEvents = [];
         renderCustomEvents();
         return;
       }
-      
-      tg.CloudStorage.getItem(
-        STORAGE_KEY,
-        (error, value) => {
-          if (error) {
-            customEvents = [];
-            renderCustomEvents();
-            return;
-          }
-          
-          if (!value) {
-            customEvents = [];
-            renderCustomEvents();
-            return;
-          }
-          
-          try {
-            const parsedEvents = JSON.parse(value);
-            
-            if (Array.isArray(parsedEvents)) {
-              customEvents = parsedEvents;
-            } else {
-              customEvents = [];
-            }
-          } catch {
-            customEvents = [];
-          }
-          
-          renderCustomEvents();
+
+      if (!value) {
+        customEvents = [];
+        renderCustomEvents();
+        return;
+      }
+
+      try {
+        const parsedEvents = JSON.parse(value);
+
+        if (Array.isArray(parsedEvents)) {
+          customEvents = parsedEvents;
+        } else {
+          customEvents = [];
         }
-      );
+      } catch {
+        customEvents = [];
+      }
+
+      renderCustomEvents();
     }
-          
-          try {
-            customEvents = JSON.parse(value);
-            
-            if (!Array.isArray(customEvents)) {
-              customEvents = [];
-            }
-          } catch {
-            customEvents = [];
-          }
-        }
-      );
-    }
+  );
+}
     
     function renderCustomEvents() {
       const list = document.getElementById("customEventsList");
@@ -835,7 +822,6 @@
     });
     
     loadCustomEvents();
-    renderCustomEvents();
   </script>
 </body>
 </html>
