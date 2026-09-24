@@ -511,10 +511,187 @@
 .channel-button:active {
   background: var(--white);
 }
+/* ===== ЭКРАН ЗАГРУЗКИ И ПЕРВЫЙ ЗАПУСК ===== */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  text-align: center;
+}
+
+.loading-logo {
+  font-size: 72px;
+  margin-bottom: 18px;
+  animation: loadingPulse 1.4s ease-in-out infinite;
+}
+
+.loading-title {
+  color: var(--orange);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+}
+
+.loading-subtitle {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.72;
+  }
+}
+
+.birthday-setup-screen {
+  display: none;
+  min-height: calc(100vh - 48px);
+  align-items: center;
+  justify-content: center;
+}
+
+.birthday-setup-screen.active {
+  display: flex;
+}
+
+.setup-content {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.setup-icon {
+  font-size: 64px;
+  margin-bottom: 18px;
+}
+
+.setup-label {
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.setup-content h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.setup-content p {
+  margin: 12px auto 24px;
+  max-width: 320px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.birthday-input {
+  width: 100%;
+  min-height: 54px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.birthday-input:focus {
+  border-color: var(--orange);
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 18px;
+  background: var(--orange);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.20);
+}
+
+.primary-button:active {
+  transform: scale(0.98);
+}
   </style>
 </head>
 
 <body>
+  <div id="loadingScreen" class="loading-screen">
+  <div class="loading-logo">⌛</div>
+  <div class="loading-title">ТАЙМЕР | TIMER</div>
+  <div class="loading-subtitle">Ваше время начинается здесь</div>
+</div>
+
+<section id="birthdaySetupScreen" class="screen birthday-setup-screen">
+  <div class="setup-content">
+    <div class="setup-icon">🎂</div>
+    <div class="setup-label">ПЕРВЫЙ ЗАПУСК</div>
+
+    <h1>Когда у вас день рождения?</h1>
+
+    <p>
+      Укажем дату, чтобы создать ваш персональный отсчёт.
+    </p>
+
+    <input
+      type="date"
+      id="birthdayInput"
+      class="birthday-input"
+    >
+
+    <button id="saveBirthdayButton" class="primary-button">
+      СОХРАНИТЬ
+    </button>
+  </div>
+</section>
+  
+  <div id="loadingScreen" class="loading-screen">
+  <div class="loading-logo">⌛</div>
+  <div class="loading-title">ТАЙМЕР | TIMER</div>
+  <div class="loading-subtitle">Ваше время начинается здесь</div>
+</div>
+
+<div id="birthdaySetupScreen" class="screen birthday-setup-screen">
+  <div class="setup-content">
+    <div class="setup-icon">🎂</div>
+    <div class="setup-label">ПЕРВЫЙ ЗАПУСК</div>
+    <h1>Когда у вас день рождения?</h1>
+    <p>Укажем дату, чтобы создать ваш персональный отсчёт.</p>
+
+    <input
+      type="date"
+      id="birthdayInput"
+      class="birthday-input"
+    >
+
+    <button id="saveBirthdayButton" class="primary-button">
+      СОХРАНИТЬ
+    </button>
+  </div>
+</div>
   <main class="app">
 
 <section id="homeScreen" class="screen active">
@@ -1168,6 +1345,58 @@ if (tg) {
     });
     
     loadCustomEvents();
+    // ===== ПЕРВЫЙ ЗАПУСК И ДЕНЬ РОЖДЕНИЯ =====
+
+const loadingScreen = document.getElementById("loadingScreen");
+const birthdaySetupScreen = document.getElementById("birthdaySetupScreen");
+const birthdayInput = document.getElementById("birthdayInput");
+const saveBirthdayButton = document.getElementById("saveBirthdayButton");
+
+function showBirthdaySetup() {
+  loadingScreen.style.display = "none";
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  birthdaySetupScreen.classList.add("active");
+}
+
+function showMainAfterLoading() {
+  loadingScreen.style.display = "none";
+  showHomeScreen();
+}
+
+function startApp() {
+  if (!loadingScreen || !birthdaySetupScreen) {
+    return;
+  }
+
+  const savedBirthday = localStorage.getItem("timerBirthday");
+
+  setTimeout(() => {
+    if (savedBirthday) {
+      showMainAfterLoading();
+    } else {
+      showBirthdaySetup();
+    }
+  }, 1200);
+}
+
+saveBirthdayButton.addEventListener("click", () => {
+  const birthday = birthdayInput.value;
+
+  if (!birthday) {
+    alert("Выберите дату рождения.");
+    return;
+  }
+
+  localStorage.setItem("timerBirthday", birthday);
+
+  showMainAfterLoading();
+});
+
+startApp();
   </script>
 </body>
 </html>
