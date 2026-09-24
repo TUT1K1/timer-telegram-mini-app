@@ -1059,16 +1059,32 @@ if (tg) {
       }, 250);
     }
 
-    function showHomeScreen() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
+function showHomeScreen() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 
-      document.getElementById("timerScreen").classList.remove("active");
-      document.getElementById("customScreen").classList.remove("active");
-      document.getElementById("homeScreen").classList.add("active");
-    }
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  const loadingScreen = document.getElementById("loadingScreen");
+  const birthdaySetupScreen = document.getElementById("birthdaySetupScreen");
+  const homeScreen = document.getElementById("homeScreen");
+
+  if (loadingScreen) {
+    loadingScreen.style.display = "none";
+  }
+
+  if (birthdaySetupScreen) {
+    birthdaySetupScreen.style.display = "none";
+  }
+
+  if (homeScreen) {
+    homeScreen.classList.add("active");
+  }
+}
 
     function showCustomScreen() {
       if (timerInterval) {
