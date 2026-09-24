@@ -667,6 +667,40 @@
     </button>
   </div>
 </section>
+
+  <script>
+  setTimeout(() => {
+    const loading = document.getElementById("loadingScreen");
+    const birthday = document.getElementById("birthdaySetupScreen");
+    const home = document.getElementById("homeScreen");
+
+    let savedBirthday = null;
+
+    try {
+      savedBirthday = localStorage.getItem("timerBirthday");
+    } catch (error) {
+      savedBirthday = null;
+    }
+
+    if (loading) {
+      loading.style.display = "none";
+    }
+
+    document.querySelectorAll(".screen").forEach(screen => {
+      screen.classList.remove("active");
+    });
+
+    if (savedBirthday) {
+      if (home) {
+        home.classList.add("active");
+      }
+    } else {
+      if (birthday) {
+        birthday.classList.add("active");
+      }
+    }
+  }, 1500);
+</script>
   
   <div id="loadingScreen" class="loading-screen">
   <div class="loading-logo">⌛</div>
