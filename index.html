@@ -1345,7 +1345,7 @@ if (tg) {
     });
     
     loadCustomEvents();
-    // ===== ПЕРВЫЙ ЗАПУСК И ДЕНЬ РОЖДЕНИЯ =====
+   // ===== ПЕРВЫЙ ЗАПУСК И ДЕНЬ РОЖДЕНИЯ =====
 
 const loadingScreen = document.getElementById("loadingScreen");
 const birthdaySetupScreen = document.getElementById("birthdaySetupScreen");
@@ -1353,17 +1353,24 @@ const birthdayInput = document.getElementById("birthdayInput");
 const saveBirthdayButton = document.getElementById("saveBirthdayButton");
 
 function showBirthdaySetup() {
-  loadingScreen.style.display = "none";
+  if (loadingScreen) {
+    loadingScreen.style.display = "none";
+  }
 
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
   });
 
-  birthdaySetupScreen.classList.add("active");
+  if (birthdaySetupScreen) {
+    birthdaySetupScreen.classList.add("active");
+  }
 }
 
 function showMainAfterLoading() {
-  loadingScreen.style.display = "none";
+  if (loadingScreen) {
+    loadingScreen.style.display = "none";
+  }
+
   showHomeScreen();
 }
 
@@ -1372,7 +1379,13 @@ function startApp() {
     return;
   }
 
-  const savedBirthday = localStorage.getItem("timerBirthday");
+  let savedBirthday = null;
+
+  try {
+    savedBirthday = localStorage.getItem("timerBirthday");
+  } catch (error) {
+    savedBirthday = null;
+  }
 
   setTimeout(() => {
     if (savedBirthday) {
@@ -1383,18 +1396,24 @@ function startApp() {
   }, 1200);
 }
 
-saveBirthdayButton.addEventListener("click", () => {
-  const birthday = birthdayInput.value;
+if (saveBirthdayButton) {
+  saveBirthdayButton.addEventListener("click", () => {
+    const birthday = birthdayInput.value;
 
-  if (!birthday) {
-    alert("Выберите дату рождения.");
-    return;
-  }
+    if (!birthday) {
+      alert("Выберите дату рождения.");
+      return;
+    }
 
-  localStorage.setItem("timerBirthday", birthday);
+    try {
+      localStorage.setItem("timerBirthday", birthday);
+    } catch (error) {
+      console.log("Не удалось сохранить дату локально.");
+    }
 
-  showMainAfterLoading();
-});
+    showMainAfterLoading();
+  });
+}
 
 startApp();
   </script>
