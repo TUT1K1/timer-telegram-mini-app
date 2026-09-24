@@ -645,6 +645,40 @@
   <div class="loading-subtitle">Ваше время начинается здесь</div>
 </div>
 
+<script>
+setTimeout(() => {
+  const loading = document.getElementById("loadingScreen");
+  const birthday = document.getElementById("birthdaySetupScreen");
+  const home = document.getElementById("homeScreen");
+
+  let savedBirthday = null;
+
+  try {
+    savedBirthday = localStorage.getItem("timerBirthday");
+  } catch (error) {
+    savedBirthday = null;
+  }
+
+  if (loading) {
+    loading.style.display = "none";
+  }
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  if (savedBirthday) {
+    if (home) {
+      home.classList.add("active");
+    }
+  } else {
+    if (birthday) {
+      birthday.classList.add("active");
+    }
+  }
+}, 1500);
+</script>
+  
 <section id="birthdaySetupScreen" class="screen birthday-setup-screen">
   <div class="setup-content">
     <div class="setup-icon">🎂</div>
@@ -668,64 +702,6 @@
   </div>
 </section>
 
-  <script>
-  setTimeout(() => {
-    const loading = document.getElementById("loadingScreen");
-    const birthday = document.getElementById("birthdaySetupScreen");
-    const home = document.getElementById("homeScreen");
-
-    let savedBirthday = null;
-
-    try {
-      savedBirthday = localStorage.getItem("timerBirthday");
-    } catch (error) {
-      savedBirthday = null;
-    }
-
-    if (loading) {
-      loading.style.display = "none";
-    }
-
-    document.querySelectorAll(".screen").forEach(screen => {
-      screen.classList.remove("active");
-    });
-
-    if (savedBirthday) {
-      if (home) {
-        home.classList.add("active");
-      }
-    } else {
-      if (birthday) {
-        birthday.classList.add("active");
-      }
-    }
-  }, 1500);
-</script>
-  
-  <div id="loadingScreen" class="loading-screen">
-  <div class="loading-logo">⌛</div>
-  <div class="loading-title">ТАЙМЕР | TIMER</div>
-  <div class="loading-subtitle">Ваше время начинается здесь</div>
-</div>
-
-<div id="birthdaySetupScreen" class="screen birthday-setup-screen">
-  <div class="setup-content">
-    <div class="setup-icon">🎂</div>
-    <div class="setup-label">ПЕРВЫЙ ЗАПУСК</div>
-    <h1>Когда у вас день рождения?</h1>
-    <p>Укажем дату, чтобы создать ваш персональный отсчёт.</p>
-
-    <input
-      type="date"
-      id="birthdayInput"
-      class="birthday-input"
-    >
-
-    <button id="saveBirthdayButton" class="primary-button">
-      СОХРАНИТЬ
-    </button>
-  </div>
-</div>
   <main class="app">
 
 <section id="homeScreen" class="screen active">
