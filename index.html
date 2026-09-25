@@ -720,37 +720,43 @@ setTimeout(() => {
     <h2>Ближайшие события</h2>
   </div>
 
-  <div class="quick-events">
-    <button class="event-card" data-event="winter">
-      <span class="event-card-icon">❄️</span>
-      <span class="event-card-name">Зима</span>
-      <span class="event-card-arrow">→</span>
-    </button>
+<div class="quick-events">
+  <button class="event-card" data-event="winter">
+    <span class="event-card-icon">❄️</span>
+    <span class="event-card-name">Зима</span>
+    <span class="event-card-arrow">→</span>
+  </button>
 
-    <button class="event-card" data-event="spring">
-      <span class="event-card-icon">🌸</span>
-      <span class="event-card-name">Весна</span>
-      <span class="event-card-arrow">→</span>
-    </button>
+  <button class="event-card" data-event="spring">
+    <span class="event-card-icon">🌸</span>
+    <span class="event-card-name">Весна</span>
+    <span class="event-card-arrow">→</span>
+  </button>
 
-    <button class="event-card" data-event="summer">
-      <span class="event-card-icon">☀️</span>
-      <span class="event-card-name">Лето</span>
-      <span class="event-card-arrow">→</span>
-    </button>
+  <button class="event-card" data-event="summer">
+    <span class="event-card-icon">☀️</span>
+    <span class="event-card-name">Лето</span>
+    <span class="event-card-arrow">→</span>
+  </button>
 
-    <button class="event-card" data-event="autumn">
-      <span class="event-card-icon">🍂</span>
-      <span class="event-card-name">Осень</span>
-      <span class="event-card-arrow">→</span>
-    </button>
+  <button class="event-card" data-event="autumn">
+    <span class="event-card-icon">🍂</span>
+    <span class="event-card-name">Осень</span>
+    <span class="event-card-arrow">→</span>
+  </button>
 
-    <button class="event-card event-card-wide" data-event="new-year">
-      <span class="event-card-icon">🎄</span>
-      <span class="event-card-name">Новый год</span>
-      <span class="event-card-arrow">→</span>
-    </button>
-  </div>
+  <button class="event-card" data-event="new-year">
+    <span class="event-card-icon">🎄</span>
+    <span class="event-card-name">Новый год</span>
+    <span class="event-card-arrow">→</span>
+  </button>
+
+<button class="event-card" data-event="birthday" id="birthdayHomeButton">
+  <span class="event-card-icon">🎂</span>
+    <span class="event-card-name">День рождения</span>
+    <span class="event-card-arrow">→</span>
+  </button>
+</div>
 
   <div class="streak-card" id="streakCard">
     <div class="streak-icon">🔥</div>
@@ -1033,9 +1039,57 @@ if (tg) {
       timerInterval = setInterval(() => {
         updateTimer(currentTimer);
       }, 250);
-    }
+    } 
+    
+function openBirthdayTimer() {
+  let birthday = null;
 
-function showHomeScreen() {
+  try {
+    birthday = localStorage.getItem("timerBirthday");
+  } catch (error) {
+    birthday = null;
+  }
+
+  if (!birthday) {
+    alert("Сначала укажите дату рождения.");
+    return;
+  }
+
+  const birthdayParts = birthday.split("-");
+
+  if (birthdayParts.length !== 3) {
+    return;
+  }
+
+  const month = Number(birthdayParts[1]);
+  const day = Number(birthdayParts[2]);
+
+  const timestamp = getNextEventTimestamp(month, day);
+
+  currentTimer = timestamp;
+
+  document.getElementById("eventTitle").textContent =
+    "ДО ДНЯ РОЖДЕНИЯ ОСТАЛОСЬ";
+
+  document.getElementById("eventDate").textContent =
+    formatEventDate(timestamp);
+
+  document.getElementById("homeScreen").classList.remove("active");
+  document.getElementById("customScreen").classList.remove("active");
+  document.getElementById("timerScreen").classList.add("active");
+
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
+
+  updateTimer(currentTimer);
+
+  timerInterval = setInterval(() => {
+    updateTimer(currentTimer);
+  }, 250);
+}
+    
+    function showHomeScreen() {
   if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
@@ -1073,11 +1127,18 @@ function showHomeScreen() {
       document.getElementById("customScreen").classList.add("active");
     }
 
-    document.querySelectorAll("[data-event]").forEach(button => {
-      button.addEventListener("click", () => {
-        openBuiltInEvent(button.dataset.event);
-      });
-    });
+document.querySelectorAll("[data-event]").forEach(button => {
+  button.addEventListener("click", () => {
+    const eventName = button.dataset.event;
+
+    if (eventName === "birthday") {
+      openBirthdayTimer();
+      return;
+    }
+
+    openBuiltInEvent(eventName);
+  });
+});
 
     document.getElementById("backButton").addEventListener("click", () => {
       showHomeScreen();
