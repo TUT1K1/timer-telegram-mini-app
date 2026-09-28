@@ -635,6 +635,95 @@
 .primary-button:active {
   transform: scale(0.98);
 }
+
+/* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
+
+.bottom-nav {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 1000;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+
+  padding: 8px;
+
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+
+  box-shadow: 0 10px 30px rgba(120, 72, 32, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item {
+  min-width: 0;
+  min-height: 58px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+
+  border: 0;
+  border-radius: 16px;
+
+  background: transparent;
+  color: var(--muted);
+
+  font-family: inherit;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.95);
+}
+
+.bottom-nav-item.active {
+  background: var(--orange-soft);
+  color: var(--orange);
+}
+
+.bottom-nav-icon {
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.bottom-nav-label {
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+  .bottom-nav {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px;
+  }
+
+  .bottom-nav-item {
+    min-height: 54px;
+  }
+
+  .bottom-nav-label {
+    font-size: 9px;
+  }
+}
+
   </style>
 </head>
 
@@ -771,11 +860,27 @@ setTimeout(() => {
     <div class="streak-arrow">→</div>
   </div>
 
-  <button class="channel-button" id="channelButton">
-    <span>НАШ КАНАЛ</span>
-    <span>→</span>
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-item active" data-nav="home">
+    <span class="bottom-nav-icon">⌂</span>
+    <span class="bottom-nav-label">Главная</span>
   </button>
-</section>
+
+  <button class="bottom-nav-item" data-nav="events">
+    <span class="bottom-nav-icon">◷</span>
+    <span class="bottom-nav-label">Мои события</span>
+  </button>
+
+  <button class="bottom-nav-item" data-nav="calendar">
+    <span class="bottom-nav-icon">□</span>
+    <span class="bottom-nav-label">Календарь</span>
+  </button>
+
+  <button class="bottom-nav-item" data-nav="profile">
+    <span class="bottom-nav-icon">♙</span>
+    <span class="bottom-nav-label">Профиль</span>
+  </button>
+</nav>
     
     <section id="timerScreen" class="screen">
       <button class="back-button" id="backButton">← НАЗАД</button>
