@@ -1960,11 +1960,7 @@ function getEventDateForCurrentCycle(event) {
   const month = parts[1];
   const day = parts[2];
 
-  if (
-    !originalYear ||
-    !month ||
-    !day
-  ) {
+  if (!originalYear || !month || !day) {
     return null;
   }
 
@@ -1980,6 +1976,23 @@ function getEventDateForCurrentCycle(event) {
       month,
       day
     );
+
+    if (timestamp < Date.now()) {
+      targetYear++;
+    }
+  }
+
+  return {
+    year: targetYear,
+    month: month,
+    day: day,
+    timestamp: getMoscowMidnightTimestamp(
+      targetYear,
+      month,
+      day
+    )
+  };
+}
 
     if (timestamp <= Date.now()) {
       targetYear++;
@@ -1998,20 +2011,44 @@ function getEventDateForCurrentCycle(event) {
   };
 }
 
-function getDaysUntilEvent(event) {
+function getTimeUntilEvent(event) {
   const target = getEventDateForCurrentCycle(event);
 
   if (!target) {
-    return 0;
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      totalMilliseconds: 0
+    };
   }
 
   const difference =
-    target.timestamp - Date.now();
+    Math.max(0, target.timestamp - Date.now());
 
-  return Math.max(
-    0,
-    Math.ceil(difference / 86400000)
-  );
+  const totalSeconds =
+    Math.floor(difference / 1000);
+
+  const days =
+    Math.floor(totalSeconds / 86400);
+
+  const hours =
+    Math.floor((totalSeconds % 86400) / 3600);
+
+  const minutes =
+    Math.floor((totalSeconds % 3600) / 60);
+
+  const seconds =
+    totalSeconds % 60;
+
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    totalMilliseconds: difference
+  };
 }
 
 function formatCustomEventDate(event) {
@@ -2036,13 +2073,15 @@ function getEventProgress(event) {
     return 0;
   }
 
-  const target = getEventDateForCurrentCycle(event);
+  const target =
+    getEventDateForCurrentCycle(event);
 
   if (!target) {
     return 0;
   }
 
-  const targetTimestamp = target.timestamp;
+  const targetTimestamp =
+    target.timestamp;
 
   const previousYearTimestamp =
     getMoscowMidnightTimestamp(
@@ -2052,21 +2091,31 @@ function getEventProgress(event) {
     );
 
   const total =
-    targetTimestamp - previousYearTimestamp;
+    targetTimestamp -
+    previousYearTimestamp;
 
-  const passed =
-    Date.now() - previousYearTimestamp;
+  const remaining =
+    targetTimestamp -
+    Date.now();
 
   if (total <= 0) {
     return 0;
   }
 
+  const passed =
+    total - remaining;
+
   const progress =
-    Math.round((passed / total) * 100);
+    Math.round(
+      (passed / total) * 100
+    );
 
   return Math.min(
     100,
-    Math.max(0, progress)
+    Math.max(
+      0,
+      progress
+    )
   );
 }
 
@@ -2220,6 +2269,23 @@ function getRussianDaysWord(number) {
   }
 
   return "дней";
+}
+
+function formatCountdownTime(event) {
+  const time =
+    getTimeUntilEvent(event);
+
+  return (
+    time.days +
+    " " +
+    getRussianDaysWord(time.days) +
+    " " +
+    String(time.hours).padStart(2, "0") +
+    ":" +
+    String(time.minutes).padStart(2, "0") +
+    ":" +
+    String(time.seconds).padStart(2, "0")
+  );
 }
 
 const eventDetailBackButton =
