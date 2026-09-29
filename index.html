@@ -648,17 +648,18 @@
 
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
+  gap: 5px;
 
-  padding: 8px;
+  padding: 7px;
 
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 247, 237, 0.96);
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 24px;
 
-  box-shadow: 0 10px 30px rgba(120, 72, 32, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(120, 72, 32, 0.14);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .bottom-nav-item {
@@ -669,10 +670,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 5px;
+
+  padding: 6px 4px;
 
   border: 0;
-  border-radius: 16px;
+  border-radius: 18px;
 
   background: transparent;
   color: var(--muted);
@@ -683,7 +686,7 @@
   transition:
     background 0.2s ease,
     color 0.2s ease,
-    transform 0.2s ease;
+    transform 0.15s ease;
 }
 
 .bottom-nav-item:active {
@@ -691,14 +694,33 @@
 }
 
 .bottom-nav-item.active {
-  background: var(--orange-soft);
-  color: var(--orange);
+  background: var(--orange);
+  color: var(--white);
+  box-shadow: 0 5px 14px rgba(249, 115, 22, 0.20);
 }
 
 .bottom-nav-icon {
-  font-size: 21px;
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   line-height: 1;
-  font-weight: 700;
+}
+
+.bottom-nav-icon svg {
+  width: 21px;
+  height: 21px;
+
+  display: block;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .bottom-nav-label {
@@ -718,10 +740,16 @@
 
   .bottom-nav-item {
     min-height: 54px;
+    border-radius: 16px;
   }
 
   .bottom-nav-label {
     font-size: 9px;
+  }
+
+  .bottom-nav-icon svg {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -749,18 +777,6 @@
   <div class="loading-title">ТАЙМЕР | TIMER</div>
   <div class="loading-subtitle">Ваше время начинается здесь</div>
 </div>
-
-  if (savedBirthday) {
-    if (home) {
-      home.classList.add("active");
-    }
-  } else {
-    if (birthday) {
-      birthday.classList.add("active");
-    }
-  }
-}, 1500);
-</script>
   
 <section id="birthdaySetupScreen" class="screen birthday-setup-screen">
   <div class="setup-content">
@@ -935,8 +951,8 @@
 <section id="calendarScreen" class="screen">
   <button class="back-button" id="calendarBackButton">← НАЗАД</button>
 
-  <h2 class="evеnt-title">КАЛЕНДАРЬ</h2>
-
+<h2 class="event-title">КАЛЕНДАРЬ</h2>
+  
   <div class="empty-message">
     <strong>Календарь</strong>
     Здесь будет календарь ваших событий.
@@ -955,25 +971,58 @@
 </section>
 
 <nav class="bottom-nav" id="bottomNav">
+
   <button class="bottom-nav-item active" data-nav="home">
-    <span class="bottom-nav-icon">⌂</span>
+    <span class="bottom-nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5"></path>
+        <path d="M5 9.5V21h14V9.5"></path>
+        <path d="M9 21v-7h6v7"></path>
+      </svg>
+    </span>
     <span class="bottom-nav-label">Главная</span>
   </button>
 
   <button class="bottom-nav-item" data-nav="events">
-    <span class="bottom-nav-icon">◷</span>
+    <span class="bottom-nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="3"></rect>
+        <path d="M7 3v4"></path>
+        <path d="M17 3v4"></path>
+        <path d="M3 10h18"></path>
+        <path d="M8 14h3"></path>
+        <path d="M8 18h3"></path>
+      </svg>
+    </span>
     <span class="bottom-nav-label">Мои события</span>
   </button>
 
   <button class="bottom-nav-item" data-nav="calendar">
-    <span class="bottom-nav-icon">□</span>
+    <span class="bottom-nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="17" rx="3"></rect>
+        <path d="M7 2v4"></path>
+        <path d="M17 2v4"></path>
+        <path d="M3 9h18"></path>
+        <path d="M8 13h2"></path>
+        <path d="M14 13h2"></path>
+        <path d="M8 17h2"></path>
+        <path d="M14 17h2"></path>
+      </svg>
+    </span>
     <span class="bottom-nav-label">Календарь</span>
   </button>
 
   <button class="bottom-nav-item" data-nav="profile">
-    <span class="bottom-nav-icon">♙</span>
+    <span class="bottom-nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"></path>
+      </svg>
+    </span>
     <span class="bottom-nav-label">Профиль</span>
   </button>
+
 </nav>
 
   </main>
