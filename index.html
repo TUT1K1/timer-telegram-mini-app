@@ -12,6 +12,7 @@
     :root {
       --orange: #f97316;
       --orange-dark: #ea580c;
+      --orange-soft: #fff7ed;
       --bg: #fff7ed;
       --text: #1c1917;
       --muted: #78716c;
@@ -34,7 +35,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 24px 16px;
+      padding: 24px 16px 120px;
     }
 
     .app {
@@ -724,6 +725,21 @@
   }
 }
 
+/* ===== НОВЫЕ РАЗДЕЛЫ ===== */
+
+#calendarScreen,
+#profileScreen {
+  padding-bottom: 100px;
+}
+
+#customScreen {
+  padding-bottom: 100px;
+}
+
+#timerScreen {
+  padding-bottom: 100px;
+}
+
   </style>
 </head>
 
@@ -733,28 +749,6 @@
   <div class="loading-title">ТАЙМЕР | TIMER</div>
   <div class="loading-subtitle">Ваше время начинается здесь</div>
 </div>
-
-<script>
-setTimeout(() => {
-  const loading = document.getElementById("loadingScreen");
-  const birthday = document.getElementById("birthdaySetupScreen");
-  const home = document.getElementById("homeScreen");
-
-  let savedBirthday = null;
-
-  try {
-    savedBirthday = localStorage.getItem("timerBirthday");
-  } catch (error) {
-    savedBirthday = null;
-  }
-
-  if (loading) {
-    loading.style.display = "none";
-  }
-
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
-  });
 
   if (savedBirthday) {
     if (home) {
@@ -860,28 +854,8 @@ setTimeout(() => {
     <div class="streak-arrow">→</div>
   </div>
 
-<nav class="bottom-nav" id="bottomNav">
-  <button class="bottom-nav-item active" data-nav="home">
-    <span class="bottom-nav-icon">⌂</span>
-    <span class="bottom-nav-label">Главная</span>
-  </button>
-
-  <button class="bottom-nav-item" data-nav="events">
-    <span class="bottom-nav-icon">◷</span>
-    <span class="bottom-nav-label">Мои события</span>
-  </button>
-
-  <button class="bottom-nav-item" data-nav="calendar">
-    <span class="bottom-nav-icon">□</span>
-    <span class="bottom-nav-label">Календарь</span>
-  </button>
-
-  <button class="bottom-nav-item" data-nav="profile">
-    <span class="bottom-nav-icon">♙</span>
-    <span class="bottom-nav-label">Профиль</span>
-  </button>
-</nav>
-    
+  </section>
+  
     <section id="timerScreen" class="screen">
       <button class="back-button" id="backButton">← НАЗАД</button>
 
@@ -957,6 +931,50 @@ setTimeout(() => {
 
   <div id="customEventsList"></div>
 </section>
+
+<section id="calendarScreen" class="screen">
+  <button class="back-button" id="calendarBackButton">← НАЗАД</button>
+
+  <h2 class="evеnt-title">КАЛЕНДАРЬ</h2>
+
+  <div class="empty-message">
+    <strong>Календарь</strong>
+    Здесь будет календарь ваших событий.
+  </div>
+</section>
+
+<section id="profileScreen" class="screen">
+  <button class="back-button" id="profileBackButton">← НАЗАД</button>
+
+  <h2 class="event-title">ПРОФИЛЬ</h2>
+
+  <div class="empty-message">
+    <strong>Ваш профиль</strong>
+    Здесь будут настройки, дата рождения, серия посещений и оформление.
+  </div>
+</section>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-item active" data-nav="home">
+    <span class="bottom-nav-icon">⌂</span>
+    <span class="bottom-nav-label">Главная</span>
+  </button>
+
+  <button class="bottom-nav-item" data-nav="events">
+    <span class="bottom-nav-icon">◷</span>
+    <span class="bottom-nav-label">Мои события</span>
+  </button>
+
+  <button class="bottom-nav-item" data-nav="calendar">
+    <span class="bottom-nav-icon">□</span>
+    <span class="bottom-nav-label">Календарь</span>
+  </button>
+
+  <button class="bottom-nav-item" data-nav="profile">
+    <span class="bottom-nav-icon">♙</span>
+    <span class="bottom-nav-label">Профиль</span>
+  </button>
+</nav>
 
   </main>
 
@@ -1219,18 +1237,82 @@ function openBirthdayTimer() {
   if (homeScreen) {
     homeScreen.classList.add("active");
   }
+
+  document.querySelectorAll(".bottom-nav-item").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  const homeNav = document.querySelector(
+    '.bottom-nav-item[data-nav="home"]'
+  );
+
+  if (homeNav) {
+    homeNav.classList.add("active");
+  }
 }
 
-    function showCustomScreen() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
+function showScreen(screenId, navName = null) {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 
-      document.getElementById("homeScreen").classList.remove("active");
-      document.getElementById("timerScreen").classList.remove("active");
-      document.getElementById("customScreen").classList.add("active");
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  const targetScreen = document.getElementById(screenId);
+
+  if (targetScreen) {
+    targetScreen.classList.add("active");
+  }
+
+  document.querySelectorAll(".bottom-nav-item").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  if (navName) {
+    const activeNav = document.querySelector(
+      `.bottom-nav-item[data-nav="${navName}"]`
+    );
+
+    if (activeNav) {
+      activeNav.classList.add("active");
     }
+  }
+}
+
+function showCustomScreen() {
+  showScreen("customScreen", "events");
+}
+
+// ===== НИЖНЯЯ НАВИГАЦИЯ =====
+
+document.querySelectorAll(".bottom-nav-item").forEach(button => {
+  button.addEventListener("click", () => {
+    const nav = button.dataset.nav;
+
+    if (nav === "home") {
+      showHomeScreen();
+      return;
+    }
+
+    if (nav === "events") {
+      showCustomScreen();
+      return;
+    }
+
+    if (nav === "calendar") {
+      showScreen("calendarScreen", "calendar");
+      return;
+    }
+
+    if (nav === "profile") {
+      showScreen("profileScreen", "profile");
+      return;
+    }
+  });
+});
 
 document.querySelectorAll("[data-event]").forEach(button => {
   button.addEventListener("click", () => {
@@ -1253,6 +1335,14 @@ document.querySelectorAll("[data-event]").forEach(button => {
       showHomeScreen();
     });
 
+    document.getElementById("calendarBackButton").addEventListener("click", () => {
+      showHomeScreen();
+    });
+
+    document.getElementById("profileBackButton").addEventListener("click", () => {
+      showHomeScreen();
+    });
+
     const customEventsButton = document.getElementById("customEventsButton");
 
     if (customEventsButton) {
@@ -1261,13 +1351,6 @@ document.querySelectorAll("[data-event]").forEach(button => {
       });
     }
     
-    document.getElementById("channelButton").addEventListener("click", () => {
-  if (tg && tg.openTelegramLink) {
-    tg.openTelegramLink("https://t.me/timer_new");
-  } else {
-    window.open("https://t.me/timer_new", "_blank");
-  }
-});
     const STORAGE_KEY = "custom_events";
     
     let customEvents = [];
