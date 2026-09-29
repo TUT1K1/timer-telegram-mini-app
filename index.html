@@ -1998,9 +1998,6 @@ function getEventDateForCurrentCycle(event) {
   };
 }
 
-  return result;
-}
-
 function getDaysUntilEvent(event) {
   const target = getEventDateForCurrentCycle(event);
 
@@ -2032,6 +2029,45 @@ function formatCustomEventDate(event) {
     month: "2-digit",
     year: "numeric"
   }).format(date);
+}
+
+function getEventProgress(event) {
+  if (!event || !event.repeatYearly) {
+    return 0;
+  }
+
+  const target = getEventDateForCurrentCycle(event);
+
+  if (!target) {
+    return 0;
+  }
+
+  const targetTimestamp = target.timestamp;
+
+  const previousYearTimestamp =
+    getMoscowMidnightTimestamp(
+      target.year - 1,
+      target.month,
+      target.day
+    );
+
+  const total =
+    targetTimestamp - previousYearTimestamp;
+
+  const passed =
+    Date.now() - previousYearTimestamp;
+
+  if (total <= 0) {
+    return 0;
+  }
+
+  const progress =
+    Math.round((passed / total) * 100);
+
+  return Math.min(
+    100,
+    Math.max(0, progress)
+  );
 }
 
 function getEventIcon(name) {
