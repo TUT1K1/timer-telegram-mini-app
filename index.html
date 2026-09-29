@@ -768,6 +768,170 @@
   padding-bottom: 100px;
 }
 
+/* ===== EVENT DETAIL CARD ===== */
+
+.event-detail-screen {
+  padding: 24px 16px 110px;
+}
+
+.event-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.event-back-button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--white);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(120, 72, 32, 0.08);
+}
+
+.event-back-button svg {
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.event-detail-title {
+  flex: 1;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.event-detail-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 28px 20px 24px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(120, 72, 32, 0.08);
+}
+
+.event-detail-icon {
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 18px;
+  border-radius: 24px;
+  background: var(--orange-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+}
+
+.event-detail-name {
+  margin: 0 0 10px;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.event-detail-remaining-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.event-detail-days {
+  margin: 6px 0 22px;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--orange);
+}
+
+.event-progress-wrap {
+  margin: 0 0 26px;
+  text-align: left;
+}
+
+.event-progress {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #ffedd5;
+}
+
+.event-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-dark));
+  transition: width 0.4s ease;
+}
+
+.event-progress-value {
+  margin-top: 7px;
+  text-align: right;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.event-info {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.event-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 13px 14px;
+  background: var(--orange-soft);
+  border-radius: 15px;
+  text-align: left;
+}
+
+.event-info-label {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.event-info-value {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.event-share-button {
+  width: 100%;
+  min-height: 50px;
+  border: 0;
+  border-radius: 17px;
+  background: var(--orange);
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(249, 115, 22, 0.20);
+}
+
+.event-share-button:active {
+  transform: scale(0.98);
+}
+
   </style>
 </head>
 
@@ -946,6 +1110,105 @@
   </div>
 
   <div id="customEventsList"></div>
+</section>
+
+<section id="eventDetailScreen" class="screen event-detail-screen">
+
+  <div class="event-detail-header">
+
+    <button
+      id="eventDetailBackButton"
+      class="event-back-button"
+      type="button"
+      aria-label="Назад"
+    >
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+
+    <h2 id="eventDetailTitle" class="event-detail-title">
+      СОБЫТИЕ
+    </h2>
+
+  </div>
+
+  <div class="event-detail-card">
+
+    <div id="eventDetailIcon" class="event-detail-icon">
+      🎉
+    </div>
+
+    <h1 id="eventDetailName" class="event-detail-name">
+      Событие
+    </h1>
+
+    <p class="event-detail-remaining-label">
+      До события осталось
+    </p>
+
+    <div id="eventDetailDays" class="event-detail-days">
+      0 дней
+    </div>
+
+    <div class="event-progress-wrap">
+
+      <div class="event-progress">
+        <div
+          id="eventProgressFill"
+          class="event-progress-fill"
+        ></div>
+      </div>
+
+      <div
+        id="eventProgressValue"
+        class="event-progress-value"
+      >
+        0%
+      </div>
+
+    </div>
+
+    <div class="event-info">
+
+      <div class="event-info-row">
+        <span class="event-info-label">
+          Дата события
+        </span>
+
+        <span
+          id="eventDetailDate"
+          class="event-info-value"
+        >
+          —
+        </span>
+      </div>
+
+      <div class="event-info-row">
+        <span class="event-info-label">
+          Повторение
+        </span>
+
+        <span
+          id="eventDetailRepeat"
+          class="event-info-value"
+        >
+          Нет
+        </span>
+      </div>
+
+    </div>
+
+    <button
+      id="eventDetailShareButton"
+      class="event-share-button"
+      type="button"
+    >
+      ПОДЕЛИТЬСЯ
+    </button>
+
+  </div>
+
 </section>
 
 <section id="calendarScreen" class="screen">
@@ -1719,6 +1982,311 @@ if (saveBirthdayButton) {
 
     showMainAfterLoading();
   });
+}
+
+/* ===== EVENT DETAIL ===== */
+
+let currentEventDetail = null;
+
+function getEventDateForCurrentCycle(event) {
+  if (!event || !event.date) {
+    return null;
+  }
+
+  const originalDate = new Date(event.date);
+
+  if (Number.isNaN(originalDate.getTime())) {
+    return null;
+  }
+
+  const now = new Date();
+
+  if (!event.repeatYearly) {
+    return originalDate;
+  }
+
+  let year = now.getFullYear();
+
+  let result = new Date(
+    year,
+    originalDate.getMonth(),
+    originalDate.getDate()
+  );
+
+  if (result < now) {
+    result = new Date(
+      year + 1,
+      originalDate.getMonth(),
+      originalDate.getDate()
+    );
+  }
+
+  return result;
+}
+
+function getDaysUntilEvent(event) {
+  const target = getEventDateForCurrentCycle(event);
+
+  if (!target) {
+    return 0;
+  }
+
+  const now = new Date();
+
+  const today = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  const targetDay = new Date(
+    target.getFullYear(),
+    target.getMonth(),
+    target.getDate()
+  );
+
+  const difference =
+    targetDay.getTime() - today.getTime();
+
+  return Math.max(
+    0,
+    Math.ceil(difference / 86400000)
+  );
+}
+
+function formatEventDate(event) {
+  const target = getEventDateForCurrentCycle(event);
+
+  if (!target) {
+    return "—";
+  }
+
+  return target.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+}
+
+function getEventIcon(name) {
+  const text = String(name || "").toLowerCase();
+
+  if (
+    text.includes("день рождения") ||
+    text.includes("рожд")
+  ) {
+    return "🎂";
+  }
+
+  if (
+    text.includes("отпуск") ||
+    text.includes("море") ||
+    text.includes("путешеств")
+  ) {
+    return "🏖️";
+  }
+
+  if (
+    text.includes("экзамен") ||
+    text.includes("учеб")
+  ) {
+    return "📚";
+  }
+
+  if (
+    text.includes("переезд")
+  ) {
+    return "📦";
+  }
+
+  if (
+    text.includes("новый год")
+  ) {
+    return "🎄";
+  }
+
+  return "🎉";
+}
+
+function getEventProgress(event) {
+  const target = getEventDateForCurrentCycle(event);
+
+  if (!target) {
+    return 0;
+  }
+
+  if (!event.repeatYearly) {
+    return 0;
+  }
+
+  const year = target.getFullYear();
+
+  const start = new Date(
+    year - 1,
+    target.getMonth(),
+    target.getDate()
+  );
+
+  const total =
+    target.getTime() - start.getTime();
+
+  const now = new Date();
+
+  const passed =
+    now.getTime() - start.getTime();
+
+  const progress =
+    Math.round((passed / total) * 100);
+
+  return Math.min(
+    100,
+    Math.max(0, progress)
+  );
+}
+
+function openEventDetail(event) {
+  if (!event) {
+    return;
+  }
+
+  currentEventDetail = event;
+
+  const detailScreen =
+    document.getElementById("eventDetailScreen");
+
+  const name =
+    document.getElementById("eventDetailName");
+
+  const title =
+    document.getElementById("eventDetailTitle");
+
+  const icon =
+    document.getElementById("eventDetailIcon");
+
+  const days =
+    document.getElementById("eventDetailDays");
+
+  const date =
+    document.getElementById("eventDetailDate");
+
+  const repeat =
+    document.getElementById("eventDetailRepeat");
+
+  const progressFill =
+    document.getElementById("eventProgressFill");
+
+  const progressValue =
+    document.getElementById("eventProgressValue");
+
+  if (!detailScreen) {
+    return;
+  }
+
+  const eventName =
+    event.name || "Событие";
+
+  const daysLeft =
+    getDaysUntilEvent(event);
+
+  const progress =
+    getEventProgress(event);
+
+  if (title) {
+    title.textContent =
+      eventName.toUpperCase();
+  }
+
+  if (name) {
+    name.textContent =
+      eventName;
+  }
+
+  if (icon) {
+    icon.textContent =
+      getEventIcon(eventName);
+  }
+
+  if (days) {
+    days.textContent =
+      daysLeft +
+      " " +
+      getRussianDaysWord(daysLeft);
+  }
+
+  if (date) {
+    date.textContent =
+      formatEventDate(event);
+  }
+
+  if (repeat) {
+    repeat.textContent =
+      event.repeatYearly
+        ? "Каждый год"
+        : "Нет";
+  }
+
+  if (progressFill) {
+    progressFill.style.width =
+      progress + "%";
+  }
+
+  if (progressValue) {
+    progressValue.textContent =
+      progress + "%";
+  }
+
+  showScreen("eventDetailScreen");
+}
+
+function getRussianDaysWord(number) {
+  const n = Math.abs(Number(number));
+
+  if (n % 10 === 1 && n % 100 !== 11) {
+    return "день";
+  }
+
+  if (
+    n % 10 >= 2 &&
+    n % 10 <= 4 &&
+    (n % 100 < 10 || n % 100 >= 20)
+  ) {
+    return "дня";
+  }
+
+  return "дней";
+}
+
+const eventDetailBackButton =
+  document.getElementById("eventDetailBackButton");
+
+if (eventDetailBackButton) {
+  eventDetailBackButton.addEventListener(
+    "click",
+    function () {
+      showScreen(
+        "customScreen",
+        "events"
+      );
+    }
+  );
+}
+
+const eventDetailShareButton =
+  document.getElementById("eventDetailShareButton");
+
+if (eventDetailShareButton) {
+  eventDetailShareButton.addEventListener(
+    "click",
+    function () {
+      if (!currentEventDetail) {
+        return;
+      }
+
+      alert(
+        "Генерацию картинки для публикации добавим следующим этапом."
+      );
+    }
+  );
 }
 
 startApp();
