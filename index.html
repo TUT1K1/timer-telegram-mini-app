@@ -2240,6 +2240,62 @@ function openEventDetail(event) {
   }
 
   showScreen("eventDetailScreen");
+
+  startEventDetailTimer();
+}
+
+let eventDetailTimerInterval = null;
+
+function startEventDetailTimer() {
+  if (eventDetailTimerInterval) {
+    clearInterval(eventDetailTimerInterval);
+  }
+
+  eventDetailTimerInterval = setInterval(() => {
+    if (!currentEventDetail) {
+      return;
+    }
+
+    const days =
+      document.getElementById("eventDetailDays");
+
+    if (!days) {
+      return;
+    }
+
+    const time =
+      getTimeUntilEvent(currentEventDetail);
+
+    days.textContent =
+      time.days +
+      " " +
+      getRussianDaysWord(time.days) +
+      " " +
+      String(time.hours).padStart(2, "0") +
+      ":" +
+      String(time.minutes).padStart(2, "0") +
+      ":" +
+      String(time.seconds).padStart(2, "0");
+
+    const progress =
+      getEventProgress(currentEventDetail);
+
+    const progressFill =
+      document.getElementById("eventProgressFill");
+
+    const progressValue =
+      document.getElementById("eventProgressValue");
+
+    if (progressFill) {
+      progressFill.style.width =
+        progress + "%";
+    }
+
+    if (progressValue) {
+      progressValue.textContent =
+        progress + "%";
+    }
+  }, 1000);
 }
 
 function getRussianDaysWord(number) {
