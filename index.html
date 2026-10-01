@@ -850,11 +850,12 @@
 }
 
 .event-detail-days {
-  margin: 6px 0 22px;
-  font-size: 34px;
-  line-height: 1;
-  font-weight: 900;
-  color: var(--orange);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  width: 100%;
+  white-space: pre-line;
 }
 
 .event-progress-wrap {
@@ -2204,12 +2205,12 @@ function openEventDetail(event) {
       getEventIcon(eventName);
   }
 
-  if (days) {
+if (days) {
     days.textContent =
       time.days +
       " " +
       getRussianDaysWord(time.days) +
-      " " +
+      "\n" +
       String(time.hours).padStart(2, "0") +
       ":" +
       String(time.minutes).padStart(2, "0") +
@@ -2266,11 +2267,11 @@ function startEventDetailTimer() {
     const time =
       getTimeUntilEvent(currentEventDetail);
 
-    days.textContent =
+days.textContent =
       time.days +
       " " +
       getRussianDaysWord(time.days) +
-      " " +
+      "\n" +
       String(time.hours).padStart(2, "0") +
       ":" +
       String(time.minutes).padStart(2, "0") +
