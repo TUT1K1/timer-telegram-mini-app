@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#f97316">
   <title>Таймер | Timer</title>
 
@@ -935,6 +935,15 @@
 }
 
   </style>
+  
+  <style>
+  html,
+  body {
+    touch-action: pan-x pan-y;
+    overscroll-behavior: none;
+  }
+</style>
+  
 </head>
 
 <body>
@@ -1952,7 +1961,8 @@ function getEventDateForCurrentCycle(event) {
     return null;
   }
 
-  const parts = event.date.split("-").map(Number);
+  const parts =
+    event.date.split("-").map(Number);
 
   if (parts.length !== 3) {
     return null;
@@ -1969,18 +1979,27 @@ function getEventDateForCurrentCycle(event) {
   let targetYear = originalYear;
 
   if (event.repeatYearly) {
-    const moscowDate = getMoscowDateParts();
+    const moscowDate =
+      getMoscowDateParts();
 
-    targetYear = moscowDate.year;
+    const currentYear =
+      moscowDate.year;
 
-    let timestamp = getMoscowMidnightTimestamp(
-      targetYear,
-      month,
-      day
-    );
+    if (originalYear > currentYear) {
+      targetYear = originalYear;
+    } else {
+      targetYear = currentYear;
 
-    if (timestamp < Date.now()) {
-      targetYear++;
+      const timestamp =
+        getMoscowMidnightTimestamp(
+          targetYear,
+          month,
+          day
+        );
+
+      if (timestamp <= Date.now()) {
+        targetYear++;
+      }
     }
   }
 
@@ -1988,11 +2007,12 @@ function getEventDateForCurrentCycle(event) {
     year: targetYear,
     month: month,
     day: day,
-    timestamp: getMoscowMidnightTimestamp(
-      targetYear,
-      month,
-      day
-    )
+    timestamp:
+      getMoscowMidnightTimestamp(
+        targetYear,
+        month,
+        day
+      )
   };
 }
 
@@ -2079,13 +2099,13 @@ function getEventProgress(event) {
     targetTimestamp -
     previousYearTimestamp;
 
-  const remaining =
-    targetTimestamp -
-    Date.now();
-
   if (total <= 0) {
     return 0;
   }
+
+  const remaining =
+    targetTimestamp -
+    Date.now();
 
   const passed =
     total - remaining;
