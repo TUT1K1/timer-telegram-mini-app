@@ -2074,7 +2074,7 @@ function formatCustomEventDate(event) {
 }
 
 function getEventProgress(event) {
-  if (!event || !event.repeatYearly) {
+  if (!event) {
     return 0;
   }
 
@@ -2088,27 +2088,58 @@ function getEventProgress(event) {
   const targetTimestamp =
     target.timestamp;
 
-  const previousYearTimestamp =
-    getMoscowMidnightTimestamp(
-      target.year - 1,
-      target.month,
-      target.day
-    );
+  const now =
+    Date.now();
+
+  const moscowDate =
+    getMoscowDateParts();
+
+  const currentYear =
+    moscowDate.year;
+
+  let startTimestamp;
+
+  if (event.repeatYearly) {
+    startTimestamp =
+      getMoscowMidnightTimestamp(
+        target.year - 1,
+        target.month,
+        target.day
+      );
+
+    if (startTimestamp > now) {
+      startTimestamp =
+        getMoscowMidnightTimestamp(
+          currentYear,
+          target.month,
+          target.day
+        );
+
+      if (startTimestamp > now) {
+        startTimestamp =
+          getMoscowMidnightTimestamp(
+            currentYear - 1,
+            target.month,
+            target.day
+          );
+      }
+    }
+  } else {
+    startTimestamp =
+      now;
+  }
 
   const total =
     targetTimestamp -
-    previousYearTimestamp;
+    startTimestamp;
 
   if (total <= 0) {
-    return 0;
+    return 100;
   }
 
-  const remaining =
-    targetTimestamp -
-    Date.now();
-
   const passed =
-    total - remaining;
+    now -
+    startTimestamp;
 
   const progress =
     Math.round(
