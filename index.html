@@ -854,6 +854,7 @@
   max-width: 100%;
   min-width: 0;
   min-height: 52px;
+  height: 52px;
 
   box-sizing: border-box;
 
@@ -865,14 +866,17 @@
   outline: none;
 
   background: #fafafa;
-  color: var(--text);
 
-  -webkit-text-fill-color: var(--text);
+  color: #1c1917;
+  -webkit-text-fill-color: #1c1917;
+
   opacity: 1;
 
   font-family: inherit;
   font-size: 15px;
   font-weight: 600;
+
+  line-height: normal;
 
   appearance: none;
   -webkit-appearance: none;
@@ -884,8 +888,8 @@
 }
 
 .form-input::placeholder {
-  color: var(--muted);
-  -webkit-text-fill-color: var(--muted);
+  color: #78716c;
+  -webkit-text-fill-color: #78716c;
   opacity: 0.75;
 }
 
@@ -919,29 +923,47 @@
   min-width: 0;
 
   height: 52px;
-
-  padding: 0 48px 0 15px;
+  min-height: 52px;
 
   box-sizing: border-box;
 
-  color: var(--text);
-  -webkit-text-fill-color: var(--text);
+  padding: 0 48px 0 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
 
   background: #fafafa;
 
+  color: #1c1917;
+  -webkit-text-fill-color: #1c1917;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  line-height: normal;
+
+  outline: none;
+
   appearance: none;
   -webkit-appearance: none;
+
+  opacity: 1;
 }
 
 .form-date-input:focus {
-  background: var(--white);
-  color: var(--text);
-  -webkit-text-fill-color: var(--text);
+  background: #ffffff;
+
+  color: #1c1917;
+  -webkit-text-fill-color: #1c1917;
+
+  border-color: var(--orange);
+
+  box-shadow:
+    0 0 0 3px rgba(249, 115, 22, 0.10);
 }
 
 .form-date-input::-webkit-calendar-picker-indicator {
-  opacity: 0;
-
   position: absolute;
 
   right: 0;
@@ -950,29 +972,35 @@
   width: 100%;
   height: 100%;
 
+  opacity: 0;
+
   cursor: pointer;
 }
 
 .form-date-input::-webkit-datetime-edit {
-  color: var(--text);
-  -webkit-text-fill-color: var(--text);
+  color: #1c1917;
+  -webkit-text-fill-color: #1c1917;
+
+  line-height: normal;
 }
 
 .form-date-input::-webkit-datetime-edit-fields-wrapper {
-  color: var(--text);
-  -webkit-text-fill-color: var(--text);
+  color: #1c1917;
+  -webkit-text-fill-color: #1c1917;
+
+  line-height: normal;
 }
 
 .form-date-input::-webkit-datetime-edit-text {
-  color: var(--muted);
-  -webkit-text-fill-color: var(--muted);
+  color: #78716c;
+  -webkit-text-fill-color: #78716c;
 }
 
 .form-date-input::-webkit-datetime-edit-month-field,
 .form-date-input::-webkit-datetime-edit-day-field,
 .form-date-input::-webkit-datetime-edit-year-field {
-  color: var(--text);
-  -webkit-text-fill-color: var(--text);
+  color: #1c1917;
+  -webkit-text-fill-color: #1c1917;
 }
 
 .date-input-icon {
@@ -981,16 +1009,17 @@
   top: 50%;
   right: 15px;
 
-  transform: translateY(-50%);
-
   width: 22px;
   height: 22px;
+
+  transform: translateY(-50%);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   font-size: 18px;
+  line-height: 1;
 
   pointer-events: none;
 }
