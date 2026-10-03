@@ -2213,6 +2213,65 @@ function formatCustomEventDate(event) {
   }).format(date);
 }
 
+function getRussianDaysWord(number) {
+  const n = Math.abs(Number(number));
+
+  if (n % 10 === 1 && n % 100 !== 11) {
+    return "день";
+  }
+
+  if (
+    n % 10 >= 2 &&
+    n % 10 <= 4 &&
+    (n % 100 < 10 || n % 100 >= 20)
+  ) {
+    return "дня";
+  }
+
+  return "дней";
+}
+
+function getEventIcon(name) {
+  const text =
+    String(name || "").toLowerCase();
+
+  if (
+    text.includes("день рождения") ||
+    text.includes("рожд")
+  ) {
+    return "🎂";
+  }
+
+  if (
+    text.includes("отпуск") ||
+    text.includes("море") ||
+    text.includes("путешеств")
+  ) {
+    return "🏖️";
+  }
+
+  if (
+    text.includes("экзамен") ||
+    text.includes("учеб")
+  ) {
+    return "📚";
+  }
+
+  if (
+    text.includes("переезд")
+  ) {
+    return "📦";
+  }
+
+  if (
+    text.includes("новый год")
+  ) {
+    return "🎄";
+  }
+
+  return "🎉";
+}
+
 function openEventDetail(event) {
   if (!event) {
     return;
