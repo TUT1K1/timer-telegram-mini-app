@@ -848,7 +848,11 @@
 }
 
 .form-input {
+  display: block;
+
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   min-height: 52px;
 
   box-sizing: border-box;
@@ -863,9 +867,15 @@
   background: #fafafa;
   color: var(--text);
 
+  -webkit-text-fill-color: var(--text);
+  opacity: 1;
+
   font-family: inherit;
   font-size: 15px;
   font-weight: 600;
+
+  appearance: none;
+  -webkit-appearance: none;
 
   transition:
     border-color 0.15s ease,
@@ -875,6 +885,7 @@
 
 .form-input::placeholder {
   color: var(--muted);
+  -webkit-text-fill-color: var(--muted);
   opacity: 0.75;
 }
 
@@ -887,20 +898,81 @@
     0 0 0 3px rgba(249, 115, 22, 0.10);
 }
 
-
 /* ===== DATE FIELD ===== */
 
 .date-input-wrap {
   position: relative;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .form-date-input {
-  padding-right: 48px;
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  height: 52px;
+
+  padding: 0 48px 0 15px;
+
+  box-sizing: border-box;
+
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+
+  background: #fafafa;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-date-input:focus {
+  background: var(--white);
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
 }
 
 .form-date-input::-webkit-calendar-picker-indicator {
   opacity: 0;
+
+  position: absolute;
+
+  right: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
   cursor: pointer;
+}
+
+.form-date-input::-webkit-datetime-edit {
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+}
+
+.form-date-input::-webkit-datetime-edit-fields-wrapper {
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
+}
+
+.form-date-input::-webkit-datetime-edit-text {
+  color: var(--muted);
+  -webkit-text-fill-color: var(--muted);
+}
+
+.form-date-input::-webkit-datetime-edit-month-field,
+.form-date-input::-webkit-datetime-edit-day-field,
+.form-date-input::-webkit-datetime-edit-year-field {
+  color: var(--text);
+  -webkit-text-fill-color: var(--text);
 }
 
 .date-input-icon {
@@ -911,11 +983,17 @@
 
   transform: translateY(-50%);
 
-  font-size: 19px;
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
 
   pointer-events: none;
 }
-
 
 /* ===== YEARLY REPEAT ===== */
 
@@ -1099,27 +1177,70 @@
   color: var(--text);
 }
 
-.my-events-count {
-  min-width: 30px;
-  height: 30px;
+.my-events-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  padding: 0 9px;
+.my-events-count {
+  width: 36px;
+  height: 36px;
+
+  flex: 0 0 36px;
 
   box-sizing: border-box;
 
-  border-radius: 999px;
+  border-radius: 50%;
 
-  background: var(--orange-soft);
+  background: var(--white);
   color: var(--orange);
+
+  border: 1px solid var(--border);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 900;
 }
 
+.add-event-button {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: var(--orange);
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: inherit;
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 16px rgba(249, 115, 22, 0.20);
+
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
+}
+
+.add-event-button:active {
+  transform: scale(0.92);
+  background: var(--orange-dark);
+}
 
 /* ===== EVENTS LIST ===== */
 
@@ -1302,6 +1423,55 @@
   font-weight: 600;
 
   color: var(--muted);
+}
+
+/* ===== CREATE EVENT SCREEN ===== */
+
+.create-event-screen {
+  padding: 24px 16px 110px;
+}
+
+.create-event-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 22px;
+}
+
+.create-event-header > div {
+  min-width: 0;
+}
+
+.create-event-header .custom-screen-title {
+  margin: 0;
+}
+
+.create-event-screen .create-event-card {
+  margin-top: 0;
+}
+
+
+/* ===== CREATE EVENT MOBILE ===== */
+
+@media (max-width: 360px) {
+
+  .create-event-card {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .form-input {
+    font-size: 14px;
+  }
+
+  .form-date-input {
+    padding-left: 13px;
+    padding-right: 44px;
+  }
+
 }
 
 /* ===== EVENT DETAIL CARD ===== */
@@ -1709,13 +1879,84 @@
   </div>
 
 
-  <!-- ===== CREATE EVENT ===== -->
+  <div class="my-events-section">
+
+    <div class="my-events-header">
+
+      <div>
+
+        <div class="my-events-kicker">
+          ВАШИ ТАЙМЕРЫ
+        </div>
+
+        <h3 class="my-events-title">
+          МОИ СОБЫТИЯ
+        </h3>
+
+      </div>
+
+
+      <div class="my-events-actions">
+
+        <div
+          id="myEventsCount"
+          class="my-events-count"
+        >
+          0
+        </div>
+
+        <button
+          id="addEventButton"
+          class="add-event-button"
+          type="button"
+          aria-label="Добавить событие"
+        >
+          +
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="customEventsList"
+      class="custom-events-list"
+    ></div>
+
+  </div>
+
+</section>
+
+<section id="createEventScreen" class="screen create-event-screen">
+
+  <div class="create-event-header">
+
+    <button
+      id="createEventBackButton"
+      class="event-back-button"
+      type="button"
+      aria-label="Назад"
+    >
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+
+    <div>
+      <div class="custom-screen-kicker">
+        ТАЙМЕР
+      </div>
+
+      <h2 class="custom-screen-title">
+        НОВОЕ СОБЫТИЕ
+      </h2>
+    </div>
+
+  </div>
+
 
   <div class="create-event-card">
-
-    <div class="create-event-card-title">
-      СОЗДАТЬ СОБЫТИЕ
-    </div>
 
     <div class="create-event-form">
 
@@ -1735,6 +1976,7 @@
           placeholder="Например: Отпуск"
           maxlength="60"
           autocomplete="off"
+          enterkeyhint="done"
         >
 
       </div>
@@ -1783,6 +2025,7 @@
 
         </span>
 
+
         <span class="switch">
 
           <input
@@ -1806,42 +2049,6 @@
       </button>
 
     </div>
-
-  </div>
-
-
-  <!-- ===== MY EVENTS ===== -->
-
-  <div class="my-events-section">
-
-    <div class="my-events-header">
-
-      <div>
-
-        <div class="my-events-kicker">
-          ВАШИ ТАЙМЕРЫ
-        </div>
-
-        <h3 class="my-events-title">
-          МОИ СОБЫТИЯ
-        </h3>
-
-      </div>
-
-      <div
-        id="myEventsCount"
-        class="my-events-count"
-      >
-        0
-      </div>
-
-    </div>
-
-
-    <div
-      id="customEventsList"
-      class="custom-events-list"
-    ></div>
 
   </div>
 
@@ -2365,6 +2572,28 @@ function showCustomScreen() {
   showScreen("customScreen", "events");
 }
 
+function showCreateEventScreen() {
+  showScreen("createEventScreen");
+}
+
+const addEventButton =
+  document.getElementById("addEventButton");
+
+if (addEventButton) {
+  addEventButton.addEventListener("click", () => {
+    showCreateEventScreen();
+  });
+}
+
+const createEventBackButton =
+  document.getElementById("createEventBackButton");
+
+if (createEventBackButton) {
+  createEventBackButton.addEventListener("click", () => {
+    showCustomScreen();
+  });
+}
+
 // ===== НИЖНЯЯ НАВИГАЦИЯ =====
 
 document.querySelectorAll(".bottom-nav-item").forEach(button => {
@@ -2659,6 +2888,18 @@ function openCustomEvent(index) {
 
   openEventDetail(event);
 }
+
+    const eventNameInput = document.getElementById("eventName");
+
+if (eventNameInput) {
+  eventNameInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      eventNameInput.blur();
+    }
+  });
+}
     
     document.getElementById("saveEventButton").addEventListener("click", () => {
       const nameInput = document.getElementById("eventName");
@@ -2692,6 +2933,8 @@ function openCustomEvent(index) {
       repeatInput.checked = false;
       
       renderCustomEvents();
+
+      showCustomScreen();
     });
     
     loadCustomEvents();
