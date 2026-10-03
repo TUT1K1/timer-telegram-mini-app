@@ -768,6 +768,542 @@
   padding-bottom: 100px;
 }
 
+/* ===== CUSTOM EVENTS SCREEN ===== */
+
+.custom-screen {
+  padding: 24px 16px 110px;
+}
+
+.custom-screen-header {
+  margin-bottom: 22px;
+}
+
+.custom-screen-kicker {
+  margin-bottom: 4px;
+
+  font-size: 11px;
+  line-height: 1;
+
+  font-weight: 900;
+  letter-spacing: 1.4px;
+
+  color: var(--orange);
+}
+
+.custom-screen-title {
+  margin: 0;
+
+  font-size: 27px;
+  line-height: 1.1;
+
+  font-weight: 900;
+
+  color: var(--text);
+}
+
+
+/* ===== CREATE EVENT CARD ===== */
+
+.create-event-card {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 22px 18px 20px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 26px;
+
+  box-shadow:
+    0 10px 30px rgba(120, 72, 32, 0.07);
+}
+
+.create-event-card-title {
+  margin-bottom: 20px;
+
+  font-size: 15px;
+  font-weight: 900;
+
+  color: var(--text);
+}
+
+.create-event-form {
+  width: 100%;
+}
+
+.form-field {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  color: var(--text);
+}
+
+.form-input {
+  width: 100%;
+  min-height: 52px;
+
+  box-sizing: border-box;
+
+  padding: 0 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  outline: none;
+
+  background: #fafafa;
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.form-input::placeholder {
+  color: var(--muted);
+  opacity: 0.75;
+}
+
+.form-input:focus {
+  background: var(--white);
+
+  border-color: var(--orange);
+
+  box-shadow:
+    0 0 0 3px rgba(249, 115, 22, 0.10);
+}
+
+
+/* ===== DATE FIELD ===== */
+
+.date-input-wrap {
+  position: relative;
+}
+
+.form-date-input {
+  padding-right: 48px;
+}
+
+.form-date-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+}
+
+.date-input-icon {
+  position: absolute;
+
+  top: 50%;
+  right: 15px;
+
+  transform: translateY(-50%);
+
+  font-size: 19px;
+
+  pointer-events: none;
+}
+
+
+/* ===== YEARLY REPEAT ===== */
+
+.yearly-repeat-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-top: 4px;
+  margin-bottom: 20px;
+
+  padding: 14px 0;
+
+  cursor: pointer;
+}
+
+.yearly-repeat-text {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.yearly-repeat-title {
+  font-size: 14px;
+  line-height: 1.2;
+
+  font-weight: 800;
+
+  color: var(--text);
+}
+
+.yearly-repeat-description {
+  margin-top: 5px;
+
+  font-size: 11px;
+  line-height: 1.35;
+
+  font-weight: 600;
+
+  color: var(--muted);
+}
+
+
+/* ===== SWITCH ===== */
+
+.switch {
+  position: relative;
+
+  width: 48px;
+  height: 28px;
+
+  flex: 0 0 48px;
+}
+
+.switch input {
+  position: absolute;
+
+  opacity: 0;
+
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: 999px;
+
+  background: #e7e1dc;
+
+  transition:
+    background 0.2s ease;
+}
+
+.switch-slider::before {
+  content: "";
+
+  position: absolute;
+
+  width: 22px;
+  height: 22px;
+
+  left: 3px;
+  top: 3px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.14);
+
+  transition:
+    transform 0.2s ease;
+}
+
+.switch input:checked + .switch-slider {
+  background: var(--orange);
+}
+
+.switch input:checked + .switch-slider::before {
+  transform: translateX(20px);
+}
+
+
+/* ===== CREATE BUTTON ===== */
+
+.create-event-button {
+  width: 100%;
+  min-height: 52px;
+
+  border: 0;
+  border-radius: 17px;
+
+  background: var(--orange);
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 900;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 18px rgba(249, 115, 22, 0.18);
+
+  transition:
+    transform 0.12s ease,
+    opacity 0.12s ease;
+}
+
+.create-event-button:active {
+  transform: scale(0.98);
+}
+
+
+/* ===== MY EVENTS ===== */
+
+.my-events-section {
+  margin-top: 28px;
+}
+
+.my-events-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 13px;
+}
+
+.my-events-kicker {
+  margin-bottom: 3px;
+
+  font-size: 10px;
+  line-height: 1;
+
+  font-weight: 900;
+  letter-spacing: 1.2px;
+
+  color: var(--orange);
+}
+
+.my-events-title {
+  margin: 0;
+
+  font-size: 20px;
+  line-height: 1.1;
+
+  font-weight: 900;
+
+  color: var(--text);
+}
+
+.my-events-count {
+  min-width: 30px;
+  height: 30px;
+
+  padding: 0 9px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background: var(--orange-soft);
+  color: var(--orange);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+  font-weight: 900;
+}
+
+
+/* ===== EVENTS LIST ===== */
+
+.custom-events-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.custom-event-item {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 16px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: 22px;
+
+  box-shadow:
+    0 8px 24px rgba(120, 72, 32, 0.06);
+}
+
+.custom-event-item-content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+}
+
+.custom-event-item-icon {
+  width: 50px;
+  height: 50px;
+
+  flex: 0 0 50px;
+
+  border-radius: 16px;
+
+  background: var(--orange-soft);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+}
+
+.custom-event-item-info {
+  min-width: 0;
+
+  flex: 1;
+}
+
+.custom-event-item-name {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 16px;
+  line-height: 1.2;
+
+  font-weight: 900;
+
+  color: var(--text);
+}
+
+.custom-event-item-date {
+  margin-top: 5px;
+
+  font-size: 12px;
+  line-height: 1.2;
+
+  font-weight: 600;
+
+  color: var(--muted);
+}
+
+.custom-event-item-actions {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 8px;
+
+  margin-top: 14px;
+}
+
+.custom-event-open-button,
+.custom-event-delete-button {
+  min-height: 42px;
+
+  border-radius: 13px;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
+}
+
+.custom-event-open-button {
+  border: 0;
+
+  background: var(--orange);
+  color: #ffffff;
+
+  box-shadow:
+    0 6px 14px rgba(249, 115, 22, 0.15);
+}
+
+.custom-event-delete-button {
+  border: 1px solid var(--border);
+
+  background: #fafafa;
+  color: var(--muted);
+}
+
+.custom-event-open-button:active,
+.custom-event-delete-button:active {
+  transform: scale(0.97);
+}
+
+
+/* ===== EMPTY EVENTS STATE ===== */
+
+.custom-events-empty {
+  padding: 28px 18px;
+
+  background: var(--white);
+
+  border: 1px dashed var(--border);
+  border-radius: 22px;
+
+  text-align: center;
+}
+
+.custom-events-empty-icon {
+  width: 54px;
+  height: 54px;
+
+  margin: 0 auto 12px;
+
+  border-radius: 18px;
+
+  background: var(--orange-soft);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+}
+
+.custom-events-empty-title {
+  margin: 0 0 6px;
+
+  font-size: 15px;
+  font-weight: 900;
+
+  color: var(--text);
+}
+
+.custom-events-empty-text {
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.45;
+
+  font-weight: 600;
+
+  color: var(--muted);
+}
+
 /* ===== EVENT DETAIL CARD ===== */
 
 .event-detail-screen {
@@ -1156,42 +1692,159 @@
       <div class="event-date" id="eventDate"></div>
     </section>
 
-    <section id="customScreen" class="screen">
-  <button class="back-button" id="customBackButton">← НАЗАД</button>
+<section id="customScreen" class="screen custom-screen">
 
-  <h2 class="event-title">ДОБАВИТЬ СОБЫТИЕ</h2>
+  <div class="custom-screen-header">
 
-  <div class="custom-form">
+    <div>
+      <div class="custom-screen-kicker">
+        ТАЙМЕР
+      </div>
 
-    <label for="eventName">Название события</label>
-    <input
-      type="text"
-      id="eventName"
-      placeholder="Например: День рождения"
-      maxlength="100"
-    >
-
-    <label for="eventDateInput">Дата события</label>
-    <input
-      type="date"
-      id="eventDateInput"
-    >
-
-    <label class="repeat-row">
-      <span>Повторять каждый год</span>
-      <input
-        type="checkbox"
-        id="repeatYearly"
-      >
-    </label>
-
-    <button class="menu-button save-button" id="saveEventButton">
-      СОХРАНИТЬ
-    </button>
+      <h2 class="custom-screen-title">
+        СОБЫТИЯ
+      </h2>
+    </div>
 
   </div>
 
-  <div id="customEventsList"></div>
+
+  <!-- ===== CREATE EVENT ===== -->
+
+  <div class="create-event-card">
+
+    <div class="create-event-card-title">
+      СОЗДАТЬ СОБЫТИЕ
+    </div>
+
+    <div class="create-event-form">
+
+      <div class="form-field">
+
+        <label
+          class="form-label"
+          for="eventName"
+        >
+          Название события
+        </label>
+
+        <input
+          id="eventName"
+          class="form-input"
+          type="text"
+          placeholder="Например: Отпуск"
+          maxlength="60"
+          autocomplete="off"
+        >
+
+      </div>
+
+
+      <div class="form-field">
+
+        <label
+          class="form-label"
+          for="eventDateInput"
+        >
+          Дата события
+        </label>
+
+        <div class="date-input-wrap">
+
+          <input
+            id="eventDateInput"
+            class="form-input form-date-input"
+            type="date"
+          >
+
+          <span class="date-input-icon">
+            📅
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <label
+        class="yearly-repeat-row"
+        for="repeatYearly"
+      >
+
+        <span class="yearly-repeat-text">
+
+          <span class="yearly-repeat-title">
+            Повторять каждый год
+          </span>
+
+          <span class="yearly-repeat-description">
+            Событие будет автоматически переноситься на следующий год
+          </span>
+
+        </span>
+
+        <span class="switch">
+
+          <input
+            id="repeatYearly"
+            type="checkbox"
+          >
+
+          <span class="switch-slider"></span>
+
+        </span>
+
+      </label>
+
+
+      <button
+        id="saveEventButton"
+        class="create-event-button"
+        type="button"
+      >
+        СОЗДАТЬ СОБЫТИЕ
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===== MY EVENTS ===== -->
+
+  <div class="my-events-section">
+
+    <div class="my-events-header">
+
+      <div>
+
+        <div class="my-events-kicker">
+          ВАШИ ТАЙМЕРЫ
+        </div>
+
+        <h3 class="my-events-title">
+          МОИ СОБЫТИЯ
+        </h3>
+
+      </div>
+
+      <div
+        id="myEventsCount"
+        class="my-events-count"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div
+      id="customEventsList"
+      class="custom-events-list"
+    ></div>
+
+  </div>
+
 </section>
 
 <section id="eventDetailScreen" class="screen event-detail-screen">
@@ -1836,7 +2489,7 @@ document.querySelectorAll("[data-event]").forEach(button => {
   );
 }
     
-    function renderCustomEvents() {
+function renderCustomEvents() {
   const list =
     document.getElementById("customEventsList");
 
@@ -1844,13 +2497,41 @@ document.querySelectorAll("[data-event]").forEach(button => {
     return;
   }
 
+  const countElement =
+    document.getElementById("myEventsCount");
+
+  if (countElement) {
+    countElement.textContent =
+      String(customEvents.length);
+  }
+
   list.innerHTML = "";
 
   if (customEvents.length === 0) {
+    list.innerHTML = `
+      <div class="custom-events-empty">
+
+        <div class="custom-events-empty-icon">
+          ⏱️
+        </div>
+
+        <h4 class="custom-events-empty-title">
+          Пока нет событий
+        </h4>
+
+        <p class="custom-events-empty-text">
+          Создайте первое событие выше,
+          чтобы начать отсчёт.
+        </p>
+
+      </div>
+    `;
+
     return;
   }
 
   customEvents.forEach((event, index) => {
+
     const item =
       document.createElement("div");
 
@@ -1881,7 +2562,7 @@ document.querySelectorAll("[data-event]").forEach(button => {
       <div class="custom-event-item-actions">
 
         <button
-          class="menu-button custom-event-open-button"
+          class="custom-event-open-button"
           type="button"
           data-custom-event="${index}"
         >
@@ -1889,7 +2570,7 @@ document.querySelectorAll("[data-event]").forEach(button => {
         </button>
 
         <button
-          class="menu-button custom-event-delete-button"
+          class="custom-event-delete-button"
           type="button"
           data-delete-event="${index}"
         >
@@ -1902,13 +2583,14 @@ document.querySelectorAll("[data-event]").forEach(button => {
     list.appendChild(item);
   });
 
+
   document
     .querySelectorAll("[data-custom-event]")
     .forEach(button => {
 
       button.addEventListener(
         "click",
-        function (event) {
+        function(event) {
 
           event.preventDefault();
           event.stopPropagation();
@@ -1930,13 +2612,14 @@ document.querySelectorAll("[data-event]").forEach(button => {
       );
     });
 
+
   document
     .querySelectorAll("[data-delete-event]")
     .forEach(button => {
 
       button.addEventListener(
         "click",
-        function (event) {
+        function(event) {
 
           event.preventDefault();
           event.stopPropagation();
@@ -1970,12 +2653,6 @@ document.querySelectorAll("[data-event]").forEach(button => {
       );
     });
 }
-    
-    function escapeHtml(text) {
-      const div = document.createElement("div");
-      div.textContent = text;
-      return div.innerHTML;
-    }
     
 function openCustomEvent(index) {
   const event = customEvents[index];
@@ -2211,6 +2888,15 @@ function formatCustomEventDate(event) {
     month: "2-digit",
     year: "numeric"
   }).format(date);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function getRussianDaysWord(number) {
