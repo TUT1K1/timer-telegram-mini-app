@@ -778,28 +778,37 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .event-back-button {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+
   border: 0;
   border-radius: 14px;
+
   background: var(--white);
   color: var(--text);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(120, 72, 32, 0.08);
+
+  box-shadow:
+    0 5px 18px rgba(120, 72, 32, 0.08);
 }
 
 .event-back-button svg {
   width: 21px;
   height: 21px;
+
   stroke: currentColor;
   fill: none;
+
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -807,127 +816,189 @@
 
 .event-detail-title {
   flex: 1;
+
   margin: 0;
-  font-size: 20px;
-  font-weight: 800;
+
+  font-size: 18px;
+  font-weight: 900;
+
   color: var(--text);
 }
 
 .event-detail-card {
+  width: 100%;
+  box-sizing: border-box;
+
   background: var(--white);
+
   border: 1px solid var(--border);
-  border-radius: 28px;
+  border-radius: 30px;
+
   padding: 28px 20px 24px;
+
   text-align: center;
-  box-shadow: 0 10px 30px rgba(120, 72, 32, 0.08);
+
+  box-shadow:
+    0 12px 34px rgba(120, 72, 32, 0.09);
 }
 
 .event-detail-icon {
-  width: 78px;
-  height: 78px;
+  width: 72px;
+  height: 72px;
+
   margin: 0 auto 18px;
-  border-radius: 24px;
+
+  border-radius: 22px;
+
   background: var(--orange-soft);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 38px;
+
+  font-size: 34px;
 }
 
 .event-detail-name {
   margin: 0 0 10px;
-  font-size: 24px;
+
+  font-size: 25px;
   line-height: 1.15;
-  font-weight: 800;
+  font-weight: 900;
+
   color: var(--text);
+
+  word-break: break-word;
 }
 
 .event-detail-remaining-label {
-  margin: 0;
+  margin: 0 0 18px;
+
   color: var(--muted);
+
   font-size: 14px;
   font-weight: 600;
 }
 
-.event-detail-days {
-  font-size: 28px;
-  font-weight: 800;
-  line-height: 1.15;
-  text-align: center;
+.event-countdown {
   width: 100%;
-  white-space: pre-line;
-  margin-bottom: 18px;
 }
 
-.event-progress-wrap {
-  margin: 0 0 26px;
-  text-align: left;
+.event-countdown-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-bottom: 20px;
 }
 
-.event-progress {
-  width: 100%;
-  height: 10px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #ffedd5;
+.event-countdown-days-number {
+  display: block;
+
+  font-size: 58px;
+  line-height: 0.95;
+  font-weight: 900;
+
+  color: var(--text);
+
+  letter-spacing: -2px;
 }
 
-.event-progress-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--orange), var(--orange-dark));
-  transition: width 0.4s ease;
-}
+.event-countdown-days-word {
+  display: block;
 
-.event-progress-value {
   margin-top: 7px;
-  text-align: right;
+
+  font-size: 14px;
+  font-weight: 800;
+
   color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
+
+  text-transform: uppercase;
 }
 
-.event-info {
+.event-countdown-small {
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 8px;
+
+  margin-bottom: 26px;
+}
+
+.event-countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  min-width: 0;
+}
+
+.event-countdown-number {
+  font-size: 24px;
+  line-height: 1;
+
+  font-weight: 900;
+
+  color: var(--text);
+}
+
+.event-countdown-label {
+  margin-top: 6px;
+
+  font-size: 10px;
+  line-height: 1;
+
+  font-weight: 800;
+
+  color: var(--muted);
+}
+
+.event-detail-date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   margin-bottom: 24px;
 }
 
-.event-info-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 13px 14px;
-  background: var(--orange-soft);
-  border-radius: 15px;
-  text-align: left;
-}
+.event-detail-date-label {
+  margin-bottom: 7px;
 
-.event-info-label {
+  font-size: 13px;
+  font-weight: 600;
+
   color: var(--muted);
-  font-size: 13px;
 }
 
-.event-info-value {
+.event-detail-date {
+  font-size: 18px;
+  font-weight: 900;
+
   color: var(--text);
-  font-size: 13px;
-  font-weight: 800;
-  text-align: right;
+
+  letter-spacing: 0.3px;
 }
 
 .event-share-button {
   width: 100%;
-  min-height: 50px;
+  min-height: 52px;
+
   border: 0;
   border-radius: 17px;
+
   background: var(--orange);
-  color: white;
+  color: #ffffff;
+
   font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
+  font-weight: 900;
+
+  letter-spacing: 0.4px;
+
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(249, 115, 22, 0.20);
+
+  box-shadow:
+    0 8px 18px rgba(249, 115, 22, 0.20);
 }
 
 .event-share-button:active {
@@ -1138,19 +1209,25 @@
       </svg>
     </button>
 
-    <h2 id="eventDetailTitle" class="event-detail-title">
-      СОБЫТИЕ
+    <h2 class="event-detail-title">
+      ТАЙМЕР
     </h2>
 
   </div>
 
   <div class="event-detail-card">
 
-    <div id="eventDetailIcon" class="event-detail-icon">
+    <div
+      id="eventDetailIcon"
+      class="event-detail-icon"
+    >
       🎉
     </div>
 
-    <h1 id="eventDetailName" class="event-detail-name">
+    <h1
+      id="eventDetailName"
+      class="event-detail-name"
+    >
       Событие
     </h1>
 
@@ -1158,55 +1235,81 @@
       До события осталось
     </p>
 
-    <div id="eventDetailDays" class="event-detail-days">
-      0 дней
-    </div>
+    <div class="event-countdown">
 
-    <div class="event-progress-wrap">
+      <div class="event-countdown-main">
+        <span
+          id="eventDetailDaysNumber"
+          class="event-countdown-days-number"
+        >
+          0
+        </span>
 
-      <div class="event-progress">
-        <div
-          id="eventProgressFill"
-          class="event-progress-fill"
-        ></div>
+        <span
+          id="eventDetailDaysWord"
+          class="event-countdown-days-word"
+        >
+          дней
+        </span>
       </div>
 
-      <div
-        id="eventProgressValue"
-        class="event-progress-value"
+      <div class="event-countdown-small">
+
+        <div class="event-countdown-unit">
+          <span
+            id="eventDetailHours"
+            class="event-countdown-number"
+          >
+            00
+          </span>
+
+          <span class="event-countdown-label">
+            ЧАСОВ
+          </span>
+        </div>
+
+        <div class="event-countdown-unit">
+          <span
+            id="eventDetailMinutes"
+            class="event-countdown-number"
+          >
+            00
+          </span>
+
+          <span class="event-countdown-label">
+            МИНУТ
+          </span>
+        </div>
+
+        <div class="event-countdown-unit">
+          <span
+            id="eventDetailSeconds"
+            class="event-countdown-number"
+          >
+            00
+          </span>
+
+          <span class="event-countdown-label">
+            СЕКУНД
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="event-detail-date-block">
+
+      <span class="event-detail-date-label">
+        Дата события
+      </span>
+
+      <span
+        id="eventDetailDate"
+        class="event-detail-date"
       >
-        0%
-      </div>
-
-    </div>
-
-    <div class="event-info">
-
-      <div class="event-info-row">
-        <span class="event-info-label">
-          Дата события
-        </span>
-
-        <span
-          id="eventDetailDate"
-          class="event-info-value"
-        >
-          —
-        </span>
-      </div>
-
-      <div class="event-info-row">
-        <span class="event-info-label">
-          Повторение
-        </span>
-
-        <span
-          id="eventDetailRepeat"
-          class="event-info-value"
-        >
-          Нет
-        </span>
-      </div>
+        03.10.2027
+      </span>
 
     </div>
 
@@ -2073,128 +2176,6 @@ function formatCustomEventDate(event) {
   }).format(date);
 }
 
-function getEventProgress(event) {
-  if (!event) {
-    return 0;
-  }
-
-  const target =
-    getEventDateForCurrentCycle(event);
-
-  if (!target) {
-    return 0;
-  }
-
-  const targetTimestamp =
-    target.timestamp;
-
-  const now =
-    Date.now();
-
-  const moscowDate =
-    getMoscowDateParts();
-
-  const currentYear =
-    moscowDate.year;
-
-  let startTimestamp;
-
-  if (event.repeatYearly) {
-    startTimestamp =
-      getMoscowMidnightTimestamp(
-        target.year - 1,
-        target.month,
-        target.day
-      );
-
-    if (startTimestamp > now) {
-      startTimestamp =
-        getMoscowMidnightTimestamp(
-          currentYear,
-          target.month,
-          target.day
-        );
-
-      if (startTimestamp > now) {
-        startTimestamp =
-          getMoscowMidnightTimestamp(
-            currentYear - 1,
-            target.month,
-            target.day
-          );
-      }
-    }
-  } else {
-    startTimestamp =
-      now;
-  }
-
-  const total =
-    targetTimestamp -
-    startTimestamp;
-
-  if (total <= 0) {
-    return 100;
-  }
-
-  const passed =
-    now -
-    startTimestamp;
-
-  const progress =
-    Math.round(
-      (passed / total) * 100
-    );
-
-  return Math.min(
-    100,
-    Math.max(
-      0,
-      progress
-    )
-  );
-}
-
-function getEventIcon(name) {
-  const text = String(name || "").toLowerCase();
-
-  if (
-    text.includes("день рождения") ||
-    text.includes("рожд")
-  ) {
-    return "🎂";
-  }
-
-  if (
-    text.includes("отпуск") ||
-    text.includes("море") ||
-    text.includes("путешеств")
-  ) {
-    return "🏖️";
-  }
-
-  if (
-    text.includes("экзамен") ||
-    text.includes("учеб")
-  ) {
-    return "📚";
-  }
-
-  if (
-    text.includes("переезд")
-  ) {
-    return "📦";
-  }
-
-  if (
-    text.includes("новый год")
-  ) {
-    return "🎄";
-  }
-
-  return "🎉";
-}
-
 function openEventDetail(event) {
   if (!event) {
     return;
@@ -2208,26 +2189,26 @@ function openEventDetail(event) {
   const name =
     document.getElementById("eventDetailName");
 
-  const title =
-    document.getElementById("eventDetailTitle");
-
   const icon =
     document.getElementById("eventDetailIcon");
 
-  const days =
-    document.getElementById("eventDetailDays");
+  const daysNumber =
+    document.getElementById("eventDetailDaysNumber");
+
+  const daysWord =
+    document.getElementById("eventDetailDaysWord");
+
+  const hours =
+    document.getElementById("eventDetailHours");
+
+  const minutes =
+    document.getElementById("eventDetailMinutes");
+
+  const seconds =
+    document.getElementById("eventDetailSeconds");
 
   const date =
     document.getElementById("eventDetailDate");
-
-  const repeat =
-    document.getElementById("eventDetailRepeat");
-
-  const progressFill =
-    document.getElementById("eventProgressFill");
-
-  const progressValue =
-    document.getElementById("eventProgressValue");
 
   if (!detailScreen) {
     return;
@@ -2239,14 +2220,6 @@ function openEventDetail(event) {
   const time =
     getTimeUntilEvent(event);
 
-  const progress =
-    getEventProgress(event);
-
-  if (title) {
-    title.textContent =
-      eventName.toUpperCase();
-  }
-
   if (name) {
     name.textContent =
       eventName;
@@ -2257,39 +2230,34 @@ function openEventDetail(event) {
       getEventIcon(eventName);
   }
 
-if (days) {
-    days.textContent =
-      time.days +
-      " " +
-      getRussianDaysWord(time.days) +
-      "\n" +
-      String(time.hours).padStart(2, "0") +
-      ":" +
-      String(time.minutes).padStart(2, "0") +
-      ":" +
+  if (daysNumber) {
+    daysNumber.textContent =
+      time.days;
+  }
+
+  if (daysWord) {
+    daysWord.textContent =
+      getRussianDaysWord(time.days);
+  }
+
+  if (hours) {
+    hours.textContent =
+      String(time.hours).padStart(2, "0");
+  }
+
+  if (minutes) {
+    minutes.textContent =
+      String(time.minutes).padStart(2, "0");
+  }
+
+  if (seconds) {
+    seconds.textContent =
       String(time.seconds).padStart(2, "0");
   }
 
   if (date) {
     date.textContent =
       formatCustomEventDate(event);
-  }
-
-  if (repeat) {
-    repeat.textContent =
-      event.repeatYearly
-        ? "Каждый год"
-        : "Нет";
-  }
-
-  if (progressFill) {
-    progressFill.style.width =
-      progress + "%";
-  }
-
-  if (progressValue) {
-    progressValue.textContent =
-      progress + "%";
   }
 
   showScreen("eventDetailScreen");
@@ -2309,81 +2277,49 @@ function startEventDetailTimer() {
       return;
     }
 
-    const days =
-      document.getElementById("eventDetailDays");
-
-    if (!days) {
-      return;
-    }
-
     const time =
       getTimeUntilEvent(currentEventDetail);
 
-days.textContent =
-      time.days +
-      " " +
-      getRussianDaysWord(time.days) +
-      "\n" +
-      String(time.hours).padStart(2, "0") +
-      ":" +
-      String(time.minutes).padStart(2, "0") +
-      ":" +
-      String(time.seconds).padStart(2, "0");
+    const daysNumber =
+      document.getElementById("eventDetailDaysNumber");
 
-    const progress =
-      getEventProgress(currentEventDetail);
+    const daysWord =
+      document.getElementById("eventDetailDaysWord");
 
-    const progressFill =
-      document.getElementById("eventProgressFill");
+    const hours =
+      document.getElementById("eventDetailHours");
 
-    const progressValue =
-      document.getElementById("eventProgressValue");
+    const minutes =
+      document.getElementById("eventDetailMinutes");
 
-    if (progressFill) {
-      progressFill.style.width =
-        progress + "%";
+    const seconds =
+      document.getElementById("eventDetailSeconds");
+
+    if (daysNumber) {
+      daysNumber.textContent =
+        time.days;
     }
 
-    if (progressValue) {
-      progressValue.textContent =
-        progress + "%";
+    if (daysWord) {
+      daysWord.textContent =
+        getRussianDaysWord(time.days);
+    }
+
+    if (hours) {
+      hours.textContent =
+        String(time.hours).padStart(2, "0");
+    }
+
+    if (minutes) {
+      minutes.textContent =
+        String(time.minutes).padStart(2, "0");
+    }
+
+    if (seconds) {
+      seconds.textContent =
+        String(time.seconds).padStart(2, "0");
     }
   }, 1000);
-}
-
-function getRussianDaysWord(number) {
-  const n = Math.abs(Number(number));
-
-  if (n % 10 === 1 && n % 100 !== 11) {
-    return "день";
-  }
-
-  if (
-    n % 10 >= 2 &&
-    n % 10 <= 4 &&
-    (n % 100 < 10 || n % 100 >= 20)
-  ) {
-    return "дня";
-  }
-
-  return "дней";
-}
-
-function formatCountdownTime(event) {
-  const time =
-    getTimeUntilEvent(event);
-
-  return (
-    time.days +
-    " " +
-    getRussianDaysWord(time.days) +
-    " " +
-    String(time.hours).padStart(2, "0") +
-    ":" +
-    String(time.minutes).padStart(2, "0") +
-    ":" +
-    String(time.seconds).padStart(2, "0")
-  );
 }
 
 const eventDetailBackButton =
