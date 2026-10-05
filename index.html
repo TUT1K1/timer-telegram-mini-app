@@ -2505,18 +2505,18 @@
 
     <button
       class="calendar-tab"
-      data-calendar-tab="all"
-      type="button"
-    >
-      ВСЕ
-    </button>
-
-    <button
-      class="calendar-tab"
       data-calendar-tab="holidays"
       type="button"
     >
       ПРАЗДНИКИ
+    </button>
+
+    <button
+      class="calendar-tab"
+      data-calendar-tab="all"
+      type="button"
+    >
+      ВСЕ
     </button>
 
   </div>
@@ -3227,7 +3227,13 @@ function openCustomEvent(index) {
     return;
   }
 
-  openEventDetail(event);
+  eventDetailReturnScreen = "customScreen";
+
+  openEventDetail({
+    ...event,
+    type: "custom",
+    icon: getEventIcon(event.name)
+  });
 }
 
     const eventNameInput = document.getElementById("eventName");
@@ -3352,9 +3358,54 @@ if (saveBirthdayButton) {
 /* ===== EVENT DETAIL ===== */
 
 let currentEventDetail = null;
+let eventDetailReturnScreen = "customScreen";
 
 function getEventDateForCurrentCycle(event) {
-  if (!event || !event.date) {
+  if (!event) {
+    return null;
+  }
+
+  if (
+    event.type === "builtin" ||
+    event.type === "holiday"
+  ) {
+    if (!event.month || !event.day) {
+      return null;
+    }
+
+    const moscowDate =
+      getMoscowDateParts();
+
+    let targetYear =
+      moscowDate.year;
+
+    let timestamp =
+      getMoscowMidnightTimestamp(
+        targetYear,
+        event.month,
+        event.day
+      );
+
+    if (timestamp <= Date.now()) {
+      targetYear++;
+
+      timestamp =
+        getMoscowMidnightTimestamp(
+          targetYear,
+          event.month,
+          event.day
+        );
+    }
+
+    return {
+      year: targetYear,
+      month: event.month,
+      day: event.day,
+      timestamp: timestamp
+    };
+  }
+
+  if (!event.date) {
     return null;
   }
 
@@ -3477,42 +3528,50 @@ let currentCalendarTab = "nearest";
 const calendarHolidays = [
   {
     name: "Новый год",
-    date: "2027-01-01",
+    month: 1,
+    day: 1,
     icon: "🎄"
   },
   {
     name: "Рождество",
-    date: "2027-01-07",
+    month: 1,
+    day: 7,
     icon: "🎁"
   },
   {
     name: "День защитника Отечества",
-    date: "2027-02-23",
+    month: 2,
+    day: 23,
     icon: "🛡️"
   },
   {
     name: "Международный женский день",
-    date: "2027-03-08",
+    month: 3,
+    day: 8,
     icon: "🌷"
   },
   {
     name: "Праздник Весны и Труда",
-    date: "2027-05-01",
+    month: 5,
+    day: 1,
     icon: "🌸"
   },
   {
     name: "День Победы",
-    date: "2027-05-09",
+    month: 5,
+    day: 9,
     icon: "🎖️"
   },
   {
     name: "День России",
-    date: "2027-06-12",
+    month: 6,
+    day: 12,
     icon: "🇷🇺"
   },
   {
     name: "День народного единства",
-    date: "2027-11-04",
+    month: 11,
+    day: 4,
     icon: "🤝"
   }
 ];
@@ -3546,6 +3605,13 @@ function getCalendarEventDate(event) {
     return getNextEventTimestamp(
       parts[1],
       parts[2]
+    );
+  }
+
+  if (event.type === "holiday") {
+    return getNextEventTimestamp(
+      event.month,
+      event.day
     );
   }
 
@@ -3670,7 +3736,8 @@ function createCalendarHolidayEvents() {
       type: "holiday",
       name: holiday.name,
       icon: holiday.icon,
-      date: holiday.date,
+      month: holiday.month,
+      day: holiday.day,
       repeatYearly: true
     };
   });
@@ -3696,19 +3763,32 @@ function getCalendarAllEvents() {
 }
 
 function getCalendarNearestEvents() {
+  const now = Date.now();
+
+  const sixMonthsLater = new Date();
+  sixMonthsLater.setMonth(
+    sixMonthsLater.getMonth() + 6
+  );
+
+  const maxTimestamp = sixMonthsLater.getTime();
+
   return getCalendarAllEvents()
     .map((event) => {
       return {
         event,
-        timestamp:
-          getCalendarEventDate(event)
+        timestamp: getCalendarEventDate(event)
       };
     })
-    .filter(item => item.timestamp)
+    .filter(item => {
+      return (
+        item.timestamp &&
+        item.timestamp > now &&
+        item.timestamp <= maxTimestamp
+      );
+    })
     .sort((a, b) => {
       return a.timestamp - b.timestamp;
     })
-    .slice(0, 10)
     .map(item => item.event);
 }
 
@@ -3733,18 +3813,35 @@ function openCalendarEvent(event) {
     return;
   }
 
+  eventDetailReturnScreen = "calendarScreen";
+
   if (event.type === "builtin") {
-    openBuiltInEvent(event.key);
+    openEventDetail({
+      type: "builtin",
+      name: event.name,
+      icon: event.icon,
+      month: event.month,
+      day: event.day,
+      repeatYearly: true
+    });
+
     return;
   }
 
   if (event.type === "birthday") {
-    openBirthdayTimer();
+    openEventDetail({
+      type: "birthday",
+      name: event.name,
+      icon: event.icon,
+      date: event.date,
+      repeatYearly: true
+    });
+
     return;
   }
 
   if (event.type === "custom") {
-    openCustomEvent(event.customIndex);
+    openEventDetail(event);
     return;
   }
 
@@ -3769,6 +3866,8 @@ function renderCalendar() {
   }
 
   if (currentCalendarTab === "all") {
+    const now = Date.now();
+
     eventsToShow =
       getCalendarAllEvents()
         .map(event => {
@@ -3778,7 +3877,12 @@ function renderCalendar() {
               getCalendarEventDate(event)
           };
         })
-        .filter(item => item.timestamp)
+        .filter(item => {
+          return (
+            item.timestamp &&
+            item.timestamp > now
+          );
+        })
         .sort((a, b) => {
           return a.timestamp - b.timestamp;
         })
@@ -4008,7 +4112,7 @@ function openEventDetail(event) {
 
   if (icon) {
     icon.textContent =
-      getEventIcon(eventName);
+      event.icon || getEventIcon(eventName);
   }
 
   if (daysNumber) {
@@ -4037,8 +4141,20 @@ function openEventDetail(event) {
   }
 
   if (date) {
-    date.textContent =
-      formatCustomEventDate(event);
+    const target =
+      getEventDateForCurrentCycle(event);
+
+    if (target) {
+      date.textContent =
+        new Intl.DateTimeFormat("ru-RU", {
+          timeZone: "Europe/Moscow",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric"
+        }).format(new Date(target.timestamp));
+    } else {
+      date.textContent = "—";
+    }
   }
 
   showScreen("eventDetailScreen");
@@ -4110,6 +4226,16 @@ if (eventDetailBackButton) {
   eventDetailBackButton.addEventListener(
     "click",
     function () {
+      if (eventDetailReturnScreen === "calendarScreen") {
+        showScreen(
+          "calendarScreen",
+          "calendar"
+        );
+
+        renderCalendar();
+        return;
+      }
+
       showScreen(
         "customScreen",
         "events"
