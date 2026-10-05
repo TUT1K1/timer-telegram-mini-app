@@ -2830,11 +2830,18 @@ function openBirthdayTimer() {
   }, 250);
 }
     
-    function showHomeScreen() {
+function showHomeScreen() {
   if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
   }
+
+  if (eventDetailTimerInterval) {
+    clearInterval(eventDetailTimerInterval);
+    eventDetailTimerInterval = null;
+  }
+
+  currentEventDetail = null;
 
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
@@ -2873,6 +2880,11 @@ function showScreen(screenId, navName = null) {
   if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
+  }
+
+  if (eventDetailTimerInterval) {
+    clearInterval(eventDetailTimerInterval);
+    eventDetailTimerInterval = null;
   }
 
   document.querySelectorAll(".screen").forEach(screen => {
@@ -2969,10 +2981,6 @@ document.querySelectorAll("[data-event]").forEach(button => {
 });
 
     document.getElementById("backButton").addEventListener("click", () => {
-      showHomeScreen();
-    });
-
-    document.getElementById("calendarBackButton").addEventListener("click", () => {
       showHomeScreen();
     });
 
