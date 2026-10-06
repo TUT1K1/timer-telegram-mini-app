@@ -753,6 +753,184 @@
   }
 }
 
+/* ===== ПРОФИЛЬ ===== */
+
+.profile-screen {
+  padding: 24px 16px 110px;
+}
+
+.profile-header {
+  margin-bottom: 22px;
+}
+
+.profile-kicker {
+  margin-bottom: 4px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  color: var(--orange);
+}
+
+.profile-title {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.1;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.profile-card {
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(120, 72, 32, 0.06);
+}
+
+.profile-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-avatar {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: var(--orange-soft);
+  color: var(--orange);
+  font-size: 27px;
+}
+
+.profile-user-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-user-name {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.profile-user-caption {
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.profile-stat {
+  padding: 12px 8px;
+  border-radius: 16px;
+  background: var(--orange-soft);
+  text-align: center;
+}
+
+.profile-stat-value {
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.profile-stat-label {
+  margin-top: 6px;
+  font-size: 9px;
+  line-height: 1.15;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.profile-section-title {
+  margin: 22px 0 10px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--orange);
+}
+
+.profile-row {
+  width: 100%;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font-family: inherit;
+}
+
+.profile-row:last-child {
+  border-bottom: 0;
+}
+
+.profile-row-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: var(--orange-soft);
+  font-size: 21px;
+}
+
+.profile-row-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-row-title {
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+.profile-row-value {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.profile-row-arrow {
+  flex: 0 0 auto;
+  color: var(--orange);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.profile-note {
+  margin: 14px 2px 0;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+}
+
 /* ===== НОВЫЕ РАЗДЕЛЫ ===== */
 
 #calendarScreen,
@@ -2528,15 +2706,182 @@
 
 </section>
 
-<section id="profileScreen" class="screen">
-  <button class="back-button" id="profileBackButton">← НАЗАД</button>
+<section id="profileScreen" class="screen profile-screen">
 
-  <h2 class="event-title">ПРОФИЛЬ</h2>
-
-  <div class="empty-message">
-    <strong>Ваш профиль</strong>
-    Здесь будут настройки, дата рождения, серия посещений и оформление.
+  <div class="profile-header">
+    <div class="profile-kicker">ТАЙМЕР</div>
+    <h2 class="profile-title">ПРОФИЛЬ</h2>
   </div>
+
+  <div class="profile-card">
+    <div class="profile-user">
+      <div class="profile-avatar">👤</div>
+
+      <div class="profile-user-info">
+        <div class="profile-user-name" id="profileUserName">
+          Пользователь
+        </div>
+
+        <div class="profile-user-caption">
+          Ваш личный Timer
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-stats">
+
+      <div class="profile-stat">
+        <div
+          class="profile-stat-value"
+          id="profileCurrentStreak"
+        >
+          0
+        </div>
+
+        <div class="profile-stat-label">
+          СЕРИЯ
+        </div>
+      </div>
+
+      <div class="profile-stat">
+        <div
+          class="profile-stat-value"
+          id="profileMaxStreak"
+        >
+          0
+        </div>
+
+        <div class="profile-stat-label">
+          МАКС. СЕРИЯ
+        </div>
+      </div>
+
+      <div class="profile-stat">
+        <div
+          class="profile-stat-value"
+          id="profileEventCount"
+        >
+          0
+        </div>
+
+        <div class="profile-stat-label">
+          СОБЫТИЙ
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="profile-section-title">
+    ВАШИ ДАННЫЕ
+  </div>
+
+  <div class="profile-card">
+
+    <button
+      class="profile-row"
+      id="profileBirthdayButton"
+      type="button"
+    >
+      <div class="profile-row-icon">🎂</div>
+
+      <div class="profile-row-content">
+        <div class="profile-row-title">
+          День рождения
+        </div>
+
+        <div
+          class="profile-row-value"
+          id="profileBirthdayValue"
+        >
+          Не указан
+        </div>
+      </div>
+
+      <div class="profile-row-arrow">→</div>
+    </button>
+
+    <div class="profile-row">
+
+      <div class="profile-row-icon">🚀</div>
+
+      <div class="profile-row-content">
+        <div class="profile-row-title">
+          В приложении с
+        </div>
+
+        <div
+          class="profile-row-value"
+          id="profileStartDate"
+        >
+          —
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="profile-section-title">
+    НАСТРОЙКИ
+  </div>
+
+  <div class="profile-card">
+
+    <div class="profile-row">
+
+      <div class="profile-row-icon">🔔</div>
+
+      <div class="profile-row-content">
+        <div class="profile-row-title">
+          Уведомления
+        </div>
+
+        <div class="profile-row-value">
+          Настройки появятся после подключения уведомлений
+        </div>
+      </div>
+
+    </div>
+
+    <div class="profile-row">
+
+      <div class="profile-row-icon">🎨</div>
+
+      <div class="profile-row-content">
+        <div class="profile-row-title">
+          Оформление
+        </div>
+
+        <div class="profile-row-value">
+          Системное
+        </div>
+      </div>
+
+    </div>
+
+    <div class="profile-row">
+
+      <div class="profile-row-icon">ℹ️</div>
+
+      <div class="profile-row-content">
+        <div class="profile-row-title">
+          О приложении
+        </div>
+
+        <div class="profile-row-value">
+          Таймер | Timer · версия 1.0
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <p class="profile-note">
+    Ваши таймеры и события остаются частью вашего личного пространства.
+  </p>
+
 </section>
 
 <nav class="bottom-nav" id="bottomNav">
@@ -2920,6 +3265,134 @@ function showCreateEventScreen() {
   showScreen("createEventScreen");
 }
 
+function getProfileDisplayName() {
+  const user = tg?.initDataUnsafe?.user;
+
+  if (user?.first_name) {
+    return user.first_name;
+  }
+
+  return "Пользователь";
+}
+
+function formatProfileDate(dateString) {
+  if (!dateString) {
+    return "—";
+  }
+
+  const date = new Date(`${dateString}T00:00:00`);
+
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  }).format(date);
+}
+
+function ensureProfileStartDate() {
+  const key = "timerAppStartDate";
+  let startDate = null;
+
+  try {
+    startDate = localStorage.getItem(key);
+
+    if (!startDate) {
+      const currentDate = getMoscowDateParts();
+
+      startDate = [
+        currentDate.year,
+        String(currentDate.month).padStart(2, "0"),
+        String(currentDate.day).padStart(2, "0")
+      ].join("-");
+
+      localStorage.setItem(key, startDate);
+    }
+  } catch (error) {
+    startDate = null;
+  }
+
+  return startDate;
+}
+
+function renderProfile() {
+  const name =
+    document.getElementById("profileUserName");
+
+  const birthdayValue =
+    document.getElementById("profileBirthdayValue");
+
+  const startDate =
+    document.getElementById("profileStartDate");
+
+  const currentStreak =
+    document.getElementById("profileCurrentStreak");
+
+  const maxStreak =
+    document.getElementById("profileMaxStreak");
+
+  const eventCount =
+    document.getElementById("profileEventCount");
+
+  if (name) {
+    name.textContent =
+      getProfileDisplayName();
+  }
+
+  let birthday = null;
+
+  try {
+    birthday =
+      localStorage.getItem("timerBirthday");
+  } catch (error) {
+    birthday = null;
+  }
+
+  if (birthdayValue) {
+    birthdayValue.textContent =
+      birthday
+        ? formatProfileDate(birthday)
+        : "Не указан";
+  }
+
+  if (startDate) {
+    startDate.textContent =
+      formatProfileDate(
+        ensureProfileStartDate()
+      );
+  }
+
+  if (currentStreak) {
+    currentStreak.textContent = "0";
+  }
+
+  if (maxStreak) {
+    maxStreak.textContent = "0";
+  }
+
+  if (eventCount) {
+    eventCount.textContent =
+      String(customEvents.length);
+  }
+}
+
+const profileBirthdayButton =
+  document.getElementById(
+    "profileBirthdayButton"
+  );
+
+if (profileBirthdayButton) {
+  profileBirthdayButton.addEventListener(
+    "click",
+    () => {
+      showBirthdaySetup();
+    }
+  );
+}
+
 const addEventButton =
   document.getElementById("addEventButton");
 
@@ -2962,6 +3435,7 @@ document.querySelectorAll(".bottom-nav-item").forEach(button => {
 
     if (nav === "profile") {
       showScreen("profileScreen", "profile");
+      renderProfile();
       return;
     }
   });
@@ -2981,10 +3455,6 @@ document.querySelectorAll("[data-event]").forEach(button => {
 });
 
     document.getElementById("backButton").addEventListener("click", () => {
-      showHomeScreen();
-    });
-
-    document.getElementById("profileBackButton").addEventListener("click", () => {
       showHomeScreen();
     });
 
@@ -3745,7 +4215,8 @@ function createCalendarHolidayEvents() {
 
 function getCalendarAllEvents() {
   const result = [
-    ...createCalendarBuiltinEvents()
+    ...createCalendarBuiltinEvents(),
+    ...createCalendarHolidayEvents()
   ];
 
   const birthday =
