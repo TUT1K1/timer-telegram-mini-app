@@ -3731,6 +3731,9 @@ document.querySelectorAll("[data-event]").forEach(button => {
       }
 
       renderCustomEvents();
+
+      if (document.getElementById("profileScreen")?.classList.contains("active")) {
+    renderProfile();
     }
   );
 }
@@ -4870,11 +4873,10 @@ function openEventDetail(event) {
   startEventDetailTimer();
 }
 
-let eventDetailTimerInterval = null;
-
 function startEventDetailTimer() {
-  if (eventDetailTimerInterval) {
+  if(eventDetailTimerInterval){
     clearInterval(eventDetailTimerInterval);
+    eventDetailTimerInterval=null;
   }
 
   eventDetailTimerInterval = setInterval(() => {
@@ -4970,7 +4972,17 @@ if (eventDetailShareButton) {
   );
 }
 
-startApp();
+try {
+  startApp();
+} catch (error) {
+  console.error("Ошибка запуска приложения:", error);
+
+  if (loadingScreen) {
+    loadingScreen.style.display = "none";
+  }
+
+  showHomeScreen();
+}
   </script>
 </body>
 </html>
