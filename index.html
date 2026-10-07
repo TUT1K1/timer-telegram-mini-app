@@ -3512,39 +3512,68 @@ function ensureProfileStartDate() {
 
 function renderProfile() {
   const name =
-    document.getElementById(
-      "profileUserName"
-    );
+    document.getElementById("profileUserName");
 
   const birthdayValue =
-    document.getElementById(
-      "profileBirthdayValue"
-    );
+    document.getElementById("profileBirthdayValue");
 
   const startDate =
-    document.getElementById(
-      "profileStartDate"
-    );
+    document.getElementById("profileStartDate");
 
   const currentStreak =
-    document.getElementById(
-      "profileCurrentStreak"
-    );
+    document.getElementById("profileCurrentStreak");
 
   const maxStreak =
-    document.getElementById(
-      "profileMaxStreak"
-    );
+    document.getElementById("profileMaxStreak");
 
   const eventCount =
-    document.getElementById(
-      "profileEventCount"
-    );
+    document.getElementById("profileEventCount");
 
   if (name) {
     name.textContent =
       getProfileDisplayName();
   }
+
+  let birthday = null;
+
+  try {
+    birthday =
+      localStorage.getItem("timerBirthday");
+  } catch (error) {
+    birthday = null;
+  }
+
+  if (birthdayValue) {
+    birthdayValue.textContent =
+      getProfileBirthdayDisplay(birthday);
+  }
+
+  const startDateValue =
+    ensureProfileStartDate();
+
+  if (startDate) {
+    startDate.textContent =
+      formatProfileDate(startDateValue);
+  }
+
+  const streak =
+    getStreakData();
+
+  if (currentStreak) {
+    currentStreak.textContent =
+      String(streak.current);
+  }
+
+  if (maxStreak) {
+    maxStreak.textContent =
+      String(streak.max);
+  }
+
+  if (eventCount) {
+    eventCount.textContent =
+      String(customEvents.length);
+  }
+}
 
 let birthdaySetupReturnScreen = null;
 
@@ -3970,6 +3999,19 @@ function startApp() {
     return;
   }
 
+  try {
+  if (!localStorage.getItem("timerAppStartDate")) {
+    localStorage.setItem(
+      "timerAppStartDate",
+      getTodayMoscowDateKey()
+    );
+  }
+} catch (error) {
+  console.log(
+    "Не удалось сохранить дату первого запуска."
+  );
+}
+
   let savedBirthday = null;
 
   try {
@@ -3979,6 +4021,9 @@ function startApp() {
   }
 
   setTimeout(() => {
+    updateStreak();
+    renderStreakCard();
+    
     if (savedBirthday) {
       showMainAfterLoading();
     } else {
@@ -4002,7 +4047,18 @@ if (saveBirthdayButton) {
       console.log("Не удалось сохранить дату локально.");
     }
 
-    showMainAfterLoading();
+    if (birthdaySetupReturnScreen === "profileScreen") {
+  birthdaySetupReturnScreen = null;
+
+  showScreen(
+    "profileScreen",
+    "profile"
+  );
+
+  renderProfile();
+} else {
+  showMainAfterLoading();
+}
   });
 }
 
