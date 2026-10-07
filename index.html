@@ -836,9 +836,16 @@
 }
 
 .profile-stat {
+  min-height: 64px;
+  box-sizing: border-box;
   padding: 12px 8px;
   border-radius: 16px;
   background: var(--orange-soft);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
@@ -3265,6 +3272,206 @@ function showCreateEventScreen() {
   showScreen("createEventScreen");
 }
 
+function getTodayMoscowDateKey() {
+  const currentDate = getMoscowDateParts();
+
+  return [
+    currentDate.year,
+    String(currentDate.month).padStart(2, "0"),
+    String(currentDate.day).padStart(2, "0")
+  ].join("-");
+}
+
+function updateStreak() {
+  const currentKey = "timerStreakCurrent";
+  const maxKey = "timerStreakMax";
+  const lastKey = "timerStreakLastDate";
+
+  const today = getTodayMoscowDateKey();
+
+  let current = 0;
+  let max = 0;
+  let lastDate = null;
+
+  try {
+    current =
+      Number(localStorage.getItem(currentKey)) || 0;
+
+    max =
+      Number(localStorage.getItem(maxKey)) || 0;
+
+    lastDate =
+      localStorage.getItem(lastKey);
+  } catch (error) {
+    current = 0;
+    max = 0;
+    lastDate = null;
+  }
+
+  if (lastDate === today) {
+    return {
+      current,
+      max
+    };
+  }
+
+  if (lastDate) {
+    const lastParts =
+      lastDate.split("-").map(Number);
+
+    if (
+      lastParts.length === 3 &&
+      lastParts.every(Number.isFinite)
+    ) {
+      const lastTimestamp =
+        getMoscowMidnightTimestamp(
+          lastParts[0],
+          lastParts[1],
+          lastParts[2]
+        );
+
+      const todayParts =
+        today.split("-").map(Number);
+
+      const todayTimestamp =
+        getMoscowMidnightTimestamp(
+          todayParts[0],
+          todayParts[1],
+          todayParts[2]
+        );
+
+      const differenceInDays =
+        Math.round(
+          (todayTimestamp - lastTimestamp) /
+          86400000
+        );
+
+      if (differenceInDays === 1) {
+        current += 1;
+      } else {
+        current = 1;
+      }
+    } else {
+      current = 1;
+    }
+  } else {
+    current = 1;
+  }
+
+  max =
+    Math.max(max, current);
+
+  try {
+    localStorage.setItem(
+      currentKey,
+      String(current)
+    );
+
+    localStorage.setItem(
+      maxKey,
+      String(max)
+    );
+
+    localStorage.setItem(
+      lastKey,
+      today
+    );
+  } catch (error) {
+    console.log(
+      "Не удалось сохранить серию."
+    );
+  }
+
+  return {
+    current,
+    max
+  };
+}
+
+function getStreakData() {
+  let current = 0;
+  let max = 0;
+
+  try {
+    current =
+      Number(
+        localStorage.getItem(
+          "timerStreakCurrent"
+        )
+      ) || 0;
+
+    max =
+      Number(
+        localStorage.getItem(
+          "timerStreakMax"
+        )
+      ) || 0;
+  } catch (error) {
+    current = 0;
+    max = 0;
+  }
+
+  return {
+    current,
+    max
+  };
+}
+
+function renderStreakCard() {
+  const value =
+    document.getElementById(
+      "currentStreakValue"
+    );
+
+  if (!value) {
+    return;
+  }
+
+  const streak =
+    getStreakData();
+
+  value.textContent =
+    String(streak.current);
+}
+
+function getProfileBirthdayDisplay(dateString) {
+  if (!dateString) {
+    return "Не указан";
+  }
+
+  const parts =
+    dateString.split("-").map(Number);
+
+  if (
+    parts.length !== 3 ||
+    parts.some(Number.isNaN)
+  ) {
+    return "Не указан";
+  }
+
+  const date =
+    new Date(
+      Date.UTC(
+        2000,
+        parts[1] - 1,
+        parts[2]
+      )
+    );
+
+  if (Number.isNaN(date.getTime())) {
+    return "Не указан";
+  }
+
+  return new Intl.DateTimeFormat(
+    "ru-RU",
+    {
+      timeZone: "UTC",
+      day: "numeric",
+      month: "long"
+    }
+  ).format(date);
+}
+
 function getProfileDisplayName() {
   const user = tg?.initDataUnsafe?.user;
 
@@ -3294,90 +3501,52 @@ function formatProfileDate(dateString) {
 }
 
 function ensureProfileStartDate() {
-  const key = "timerAppStartDate";
-  let startDate = null;
-
   try {
-    startDate = localStorage.getItem(key);
-
-    if (!startDate) {
-      const currentDate = getMoscowDateParts();
-
-      startDate = [
-        currentDate.year,
-        String(currentDate.month).padStart(2, "0"),
-        String(currentDate.day).padStart(2, "0")
-      ].join("-");
-
-      localStorage.setItem(key, startDate);
-    }
+    return localStorage.getItem(
+      "timerAppStartDate"
+    );
   } catch (error) {
-    startDate = null;
+    return null;
   }
-
-  return startDate;
 }
 
 function renderProfile() {
   const name =
-    document.getElementById("profileUserName");
+    document.getElementById(
+      "profileUserName"
+    );
 
   const birthdayValue =
-    document.getElementById("profileBirthdayValue");
+    document.getElementById(
+      "profileBirthdayValue"
+    );
 
   const startDate =
-    document.getElementById("profileStartDate");
+    document.getElementById(
+      "profileStartDate"
+    );
 
   const currentStreak =
-    document.getElementById("profileCurrentStreak");
+    document.getElementById(
+      "profileCurrentStreak"
+    );
 
   const maxStreak =
-    document.getElementById("profileMaxStreak");
+    document.getElementById(
+      "profileMaxStreak"
+    );
 
   const eventCount =
-    document.getElementById("profileEventCount");
+    document.getElementById(
+      "profileEventCount"
+    );
 
   if (name) {
     name.textContent =
       getProfileDisplayName();
   }
 
-  let birthday = null;
-
-  try {
-    birthday =
-      localStorage.getItem("timerBirthday");
-  } catch (error) {
-    birthday = null;
-  }
-
-  if (birthdayValue) {
-    birthdayValue.textContent =
-      birthday
-        ? formatProfileDate(birthday)
-        : "Не указан";
-  }
-
-  if (startDate) {
-    startDate.textContent =
-      formatProfileDate(
-        ensureProfileStartDate()
-      );
-  }
-
-  if (currentStreak) {
-    currentStreak.textContent = "0";
-  }
-
-  if (maxStreak) {
-    maxStreak.textContent = "0";
-  }
-
-  if (eventCount) {
-    eventCount.textContent =
-      String(customEvents.length);
-  }
-}
+let birthdaySetupReturnScreen = null;
 
 const profileBirthdayButton =
   document.getElementById(
@@ -3388,6 +3557,18 @@ if (profileBirthdayButton) {
   profileBirthdayButton.addEventListener(
     "click",
     () => {
+      birthdaySetupReturnScreen =
+        "profileScreen";
+
+      try {
+        birthdayInput.value =
+          localStorage.getItem(
+            "timerBirthday"
+          ) || "";
+      } catch (error) {
+        birthdayInput.value = "";
+      }
+
       showBirthdaySetup();
     }
   );
