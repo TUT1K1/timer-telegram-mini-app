@@ -559,9 +559,16 @@
 
 .birthday-setup-screen {
   display: none;
+
   min-height: calc(100vh - 48px);
+
   align-items: center;
   justify-content: center;
+
+  padding: 24px 16px 110px;
+
+  background: var(--bg);
+  color: var(--text);
 }
 
 .birthday-setup-screen.active {
@@ -836,32 +843,38 @@
 }
 
 .profile-stat {
-  min-height: 64px;
+  min-height: 72px;
   box-sizing: border-box;
   padding: 12px 8px;
-  border-radius: 16px;
-  background: var(--orange-soft);
-  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--orange);
+  border: 1px solid var(--orange);
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   text-align: center;
+
+  box-shadow:
+    0 6px 16px rgba(249, 115, 22, 0.14);
 }
 
 .profile-stat-value {
-  font-size: 20px;
+  font-size: 21px;
   line-height: 1;
   font-weight: 900;
-  color: var(--text);
+  color: #ffffff;
 }
 
 .profile-stat-label {
   margin-top: 6px;
   font-size: 9px;
   line-height: 1.15;
-  font-weight: 800;
-  color: var(--muted);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .profile-section-title {
@@ -3219,6 +3232,13 @@ function showHomeScreen() {
     item.classList.remove("active");
   });
 
+  const bottomNav =
+    document.getElementById("bottomNav");
+
+  if (bottomNav) {
+    bottomNav.style.display = "grid";
+  }
+  
   const homeNav = document.querySelector(
     '.bottom-nav-item[data-nav="home"]'
   );
@@ -3590,15 +3610,19 @@ if (profileBirthdayButton) {
         "profileScreen";
 
       try {
-        birthdayInput.value =
-          localStorage.getItem(
-            "timerBirthday"
-          ) || "";
+        if (birthdayInput) {
+          birthdayInput.value =
+            localStorage.getItem(
+              "timerBirthday"
+            ) || "";
+        }
       } catch (error) {
-        birthdayInput.value = "";
+        if (birthdayInput) {
+          birthdayInput.value = "";
+        }
       }
 
-      showBirthdaySetup();
+      showBirthdayEditScreen();
     }
   );
 }
@@ -3994,8 +4018,41 @@ function showBirthdaySetup() {
   });
 
   if (birthdaySetupScreen) {
+    birthdaySetupScreen.style.display = "flex";
     birthdaySetupScreen.classList.add("active");
   }
+
+  const bottomNav =
+    document.getElementById("bottomNav");
+
+  if (bottomNav) {
+    bottomNav.style.display = "none";
+  }
+}
+
+function showBirthdayEditScreen() {
+  if (loadingScreen) {
+    loadingScreen.style.display = "none";
+  }
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  if (birthdaySetupScreen) {
+    birthdaySetupScreen.style.display = "flex";
+    birthdaySetupScreen.classList.add("active");
+  }
+
+  const bottomNav =
+    document.getElementById("bottomNav");
+
+  if (bottomNav) {
+    bottomNav.style.display = "none";
+  }
+
+  document.body.style.background =
+    "var(--bg)";
 }
 
 function showMainAfterLoading() {
@@ -4091,19 +4148,41 @@ if (saveBirthdayButton) {
       console.log("Не удалось сохранить дату локально.");
     }
 
-    if (birthdaySetupReturnScreen === "profileScreen") {
+if (birthdaySetupReturnScreen === "profileScreen") {
   birthdaySetupReturnScreen = null;
+
+  if (birthdaySetupScreen) {
+    birthdaySetupScreen.style.display = "none";
+  }
+
+  const bottomNav =
+    document.getElementById("bottomNav");
+
+  if (bottomNav) {
+    bottomNav.style.display = "grid";
+  }
 
   showScreen(
     "profileScreen",
     "profile"
   );
 
-  renderProfile();
-} else {
-  showMainAfterLoading();
-}
-  });
+    renderProfile();
+  } else {
+    if (birthdaySetupScreen) {
+      birthdaySetupScreen.style.display = "none";
+    }
+
+    const bottomNav =
+      document.getElementById("bottomNav");
+
+    if (bottomNav) {
+      bottomNav.style.display = "grid";
+    }
+
+    showMainAfterLoading();
+  }
+ });
 }
 
 /* ===== EVENT DETAIL ===== */
