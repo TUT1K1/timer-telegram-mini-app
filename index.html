@@ -3430,9 +3430,8 @@ function renderStreakCard() {
   const streak =
     getStreakData();
 
-  value.textContent =
-    function String(streak.current);
-}
+value.textContent =
+    String(streak.current);
 
 function getProfileBirthdayDisplay(dateString) {
   if (!dateString) {
@@ -4012,34 +4011,66 @@ function startApp() {
   }
 
   try {
-  if (!localStorage.getItem("timerAppStartDate")) {
-    localStorage.setItem(
-      "timerAppStartDate",
-      getTodayMoscowDateKey()
+    if (!localStorage.getItem("timerAppStartDate")) {
+      localStorage.setItem(
+        "timerAppStartDate",
+        getTodayMoscowDateKey()
+      );
+    }
+  } catch (error) {
+    console.log(
+      "Не удалось сохранить дату первого запуска.",
+      error
     );
   }
-} catch (error) {
-  console.log(
-    "Не удалось сохранить дату первого запуска."
-  );
-}
 
   let savedBirthday = null;
 
   try {
-    savedBirthday = localStorage.getItem("timerBirthday");
+    savedBirthday =
+      localStorage.getItem("timerBirthday");
   } catch (error) {
     savedBirthday = null;
   }
 
   setTimeout(() => {
-    updateStreak();
-    renderStreakCard();
-    
-    if (savedBirthday) {
-      showMainAfterLoading();
-    } else {
-      showBirthdaySetup();
+    try {
+      updateStreak();
+      renderStreakCard();
+
+      if (savedBirthday) {
+        showMainAfterLoading();
+      } else {
+        showBirthdaySetup();
+      }
+    } catch (error) {
+      console.error(
+        "Ошибка во время запуска приложения:",
+        error
+      );
+
+      if (loadingScreen) {
+        loadingScreen.style.display = "none";
+      }
+
+      document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+          screen.classList.remove("active");
+        });
+
+      if (savedBirthday) {
+        const homeScreen =
+          document.getElementById("homeScreen");
+
+        if (homeScreen) {
+          homeScreen.classList.add("active");
+        }
+      } else {
+        if (birthdaySetupScreen) {
+          birthdaySetupScreen.classList.add("active");
+        }
+      }
     }
   }, 1200);
 }
