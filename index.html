@@ -3431,7 +3431,7 @@ function renderStreakCard() {
     getStreakData();
 
   value.textContent =
-    String(streak.current);
+    function String(streak.current);
 }
 
 function getProfileBirthdayDisplay(dateString) {
@@ -3696,7 +3696,7 @@ document.querySelectorAll("[data-event]").forEach(button => {
       );
     }
     
-    function loadCustomEvents() {
+function loadCustomEvents() {
   if (!tg || !tg.CloudStorage) {
     customEvents = [];
     renderCustomEvents();
@@ -3707,6 +3707,7 @@ document.querySelectorAll("[data-event]").forEach(button => {
     STORAGE_KEY,
     (error, value) => {
       if (error) {
+        console.log("Не удалось загрузить события.");
         customEvents = [];
         renderCustomEvents();
         return;
@@ -3726,14 +3727,22 @@ document.querySelectorAll("[data-event]").forEach(button => {
         } else {
           customEvents = [];
         }
-      } catch {
+      } catch (error) {
+        console.log("Ошибка чтения событий.");
         customEvents = [];
       }
 
       renderCustomEvents();
 
-      if (document.getElementById("profileScreen")?.classList.contains("active")) {
-    renderProfile();
+      const profileScreen =
+        document.getElementById("profileScreen");
+
+      if (
+        profileScreen &&
+        profileScreen.classList.contains("active")
+      ) {
+        renderProfile();
+      }
     }
   );
 }
@@ -4069,6 +4078,7 @@ if (saveBirthdayButton) {
 
 let currentEventDetail = null;
 let eventDetailReturnScreen = "customScreen";
+let eventDetailTimerInterval = null;
 
 function getEventDateForCurrentCycle(event) {
   if (!event) {
@@ -4729,6 +4739,23 @@ function getRussianDaysWord(number) {
   }
 
   return "дней";
+}
+
+function showStreakInfo() {
+  const streak = getStreakData();
+
+  alert(
+    `Текущая серия: ${streak.current} ${getRussianDaysWord(streak.current)}\n` +
+    `Максимальная серия: ${streak.max} ${getRussianDaysWord(streak.max)}`
+  );
+}
+
+const streakCard = document.getElementById("streakCard");
+
+if (streakCard) {
+  streakCard.addEventListener("click", () => {
+    showStreakInfo();
+  });
 }
 
 function getEventIcon(name) {
