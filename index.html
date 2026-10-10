@@ -3343,40 +3343,40 @@ if (tg) {
       document.getElementById("secondsValue").textContent = seconds;
     }
 
-    function openBuiltInEvent(eventKey) {
-      const event = events[eventKey];
+function openBuiltInEvent(eventKey) {
+  const event = events[eventKey];
 
-      if (!event) {
-        return;
-      }
+  if (!event) {
+    return;
+  }
 
-      const timestamp = getNextEventTimestamp(
-        event.month,
-        event.day
-      );
+  const eventNames = {
+    winter: "Зима",
+    spring: "Весна",
+    summer: "Лето",
+    autumn: "Осень",
+    "new-year": "Новый год"
+  };
 
-      currentTimer = timestamp;
+  const eventIcons = {
+    winter: "❄️",
+    spring: "🌸",
+    summer: "☀️",
+    autumn: "🍂",
+    "new-year": "🎄"
+  };
 
-      document.getElementById("eventTitle").textContent =
-        `ДО ${event.name} ОСТАЛОСЬ`;
+  eventDetailReturnScreen = "homeScreen";
 
-      document.getElementById("eventDate").textContent =
-        formatEventDate(timestamp);
-
-      document.getElementById("homeScreen").classList.remove("active");
-      document.getElementById("customScreen").classList.remove("active");
-      document.getElementById("timerScreen").classList.add("active");
-
-      if (timerInterval) {
-        clearInterval(timerInterval);
-      }
-
-      updateTimer(currentTimer);
-
-      timerInterval = setInterval(() => {
-        updateTimer(currentTimer);
-      }, 250);
-    } 
+  openEventDetail({
+    type: "builtin",
+    name: eventNames[eventKey] || event.name,
+    icon: eventIcons[eventKey] || "🎉",
+    month: event.month,
+    day: event.day,
+    repeatYearly: true
+  });
+}
     
 function openBirthdayTimer() {
   let birthday = null;
