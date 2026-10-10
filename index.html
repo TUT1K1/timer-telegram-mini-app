@@ -4501,6 +4501,12 @@ let currentCalendarTab = "nearest";
 
 const calendarHolidays = [
   {
+  name: "Новый год",
+  month: 1,
+  day: 1,
+  icon: "🎄"
+},
+  {
     name: "Рождество",
     month: 1,
     day: 7,
@@ -4714,7 +4720,9 @@ function createCalendarHolidayEvents() {
 function getCalendarAllEvents() {
   const result = [
     ...createCalendarBuiltinEvents(),
-    ...createCalendarHolidayEvents()
+    ...createCalendarHolidayEvents().filter(
+      (event) => event.name !== "Новый год"
+    )
   ];
 
   const birthday =
