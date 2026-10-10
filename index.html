@@ -629,6 +629,53 @@
   border-color: var(--orange);
 }
 
+.birthday-date-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.birthday-date-row .birthday-input {
+  min-width: 0;
+  margin-bottom: 12px;
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+.birthday-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.birthday-actions .primary-button,
+.birthday-actions .secondary-button {
+  min-width: 0;
+  width: 100%;
+  min-height: 54px;
+  padding: 10px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.secondary-button {
+  background: var(--white);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.secondary-button[hidden] {
+  display: none !important;
+}
+
+.birthday-actions:has(.secondary-button[hidden]) {
+  grid-template-columns: 1fr;
+}
+
 .primary-button {
   width: 100%;
   min-height: 54px;
@@ -2233,15 +2280,68 @@
       Укажем дату, чтобы создать ваш персональный отсчёт.
     </p>
 
-    <input
-      type="date"
-      id="birthdayInput"
-      class="birthday-input"
-    >
+ <div class="birthday-date-row">
+      <select id="birthdayDayInput" class="birthday-input" aria-label="День рождения">
+        <option value="">День</option>
+        <option value="01">1</option>
+        <option value="02">2</option>
+        <option value="03">3</option>
+        <option value="04">4</option>
+        <option value="05">5</option>
+        <option value="06">6</option>
+        <option value="07">7</option>
+        <option value="08">8</option>
+        <option value="09">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+        <option value="24">24</option>
+        <option value="25">25</option>
+        <option value="26">26</option>
+        <option value="27">27</option>
+        <option value="28">28</option>
+        <option value="29">29</option>
+        <option value="30">30</option>
+        <option value="31">31</option>
+      </select>
 
-    <button id="saveBirthdayButton" class="primary-button">
-      СОХРАНИТЬ
-    </button>
+      <select id="birthdayMonthInput" class="birthday-input" aria-label="Месяц рождения">
+        <option value="">Месяц</option>
+        <option value="01">Январь</option>
+        <option value="02">Февраль</option>
+        <option value="03">Март</option>
+        <option value="04">Апрель</option>
+        <option value="05">Май</option>
+        <option value="06">Июнь</option>
+        <option value="07">Июль</option>
+        <option value="08">Август</option>
+        <option value="09">Сентябрь</option>
+        <option value="10">Октябрь</option>
+        <option value="11">Ноябрь</option>
+        <option value="12">Декабрь</option>
+      </select>
+    </div>
+
+    <div class="birthday-actions">
+      <button id="saveBirthdayButton" class="primary-button" type="button">
+        СОХРАНИТЬ
+      </button>
+
+      <button id="cancelBirthdayButton" class="secondary-button" type="button" hidden>
+        ОТМЕНА
+      </button>
+    </div>
   </div>
 </section>
 
@@ -3597,34 +3697,36 @@ function renderProfile() {
 
 let birthdaySetupReturnScreen = null;
 
-const profileBirthdayButton =
-  document.getElementById(
-    "profileBirthdayButton"
-  );
-
 if (profileBirthdayButton) {
-  profileBirthdayButton.addEventListener(
-    "click",
-    () => {
-      birthdaySetupReturnScreen =
-        "profileScreen";
+  profileBirthdayButton.addEventListener("click", () => {
+    birthdaySetupReturnScreen = "profileScreen";
 
-      try {
-        if (birthdayInput) {
-          birthdayInput.value =
-            localStorage.getItem(
-              "timerBirthday"
-            ) || "";
-        }
-      } catch (error) {
-        if (birthdayInput) {
-          birthdayInput.value = "";
-        }
+    let savedBirthday = "";
+
+    try {
+      savedBirthday =
+        localStorage.getItem("timerBirthday") || "";
+    } catch (error) {
+      savedBirthday = "";
+    }
+
+    const parts = savedBirthday.split("-");
+
+    if (parts.length === 3) {
+      if (birthdayDayInput) {
+        birthdayDayInput.value = parts[2];
       }
 
-      showBirthdayEditScreen();
+      if (birthdayMonthInput) {
+        birthdayMonthInput.value = parts[1];
+      }
+    } else {
+      if (birthdayDayInput) birthdayDayInput.value = "";
+      if (birthdayMonthInput) birthdayMonthInput.value = "";
     }
-  );
+
+    showBirthdayEditScreen();
+  });
 }
 
 const addEventButton =
@@ -4005,8 +4107,10 @@ if (eventNameInput) {
 
 const loadingScreen = document.getElementById("loadingScreen");
 const birthdaySetupScreen = document.getElementById("birthdaySetupScreen");
-const birthdayInput = document.getElementById("birthdayInput");
+const birthdayDayInput = document.getElementById("birthdayDayInput");
+const birthdayMonthInput = document.getElementById("birthdayMonthInput");
 const saveBirthdayButton = document.getElementById("saveBirthdayButton");
+const cancelBirthdayButton = document.getElementById("cancelBirthdayButton");
 
 function showBirthdaySetup() {
   if (loadingScreen) {
@@ -4020,6 +4124,10 @@ function showBirthdaySetup() {
   if (birthdaySetupScreen) {
     birthdaySetupScreen.style.display = "flex";
     birthdaySetupScreen.classList.add("active");
+  }
+
+  if (cancelBirthdayButton) {
+    cancelBirthdayButton.hidden = true;
   }
 
   const bottomNav =
@@ -4042,6 +4150,10 @@ function showBirthdayEditScreen() {
   if (birthdaySetupScreen) {
     birthdaySetupScreen.style.display = "flex";
     birthdaySetupScreen.classList.add("active");
+  }
+
+  if (cancelBirthdayButton) {
+    cancelBirthdayButton.hidden = false;
   }
 
   const bottomNav =
@@ -4134,18 +4246,31 @@ function startApp() {
 }
 
 if (saveBirthdayButton) {
-  saveBirthdayButton.addEventListener("click", () => {
-    const birthday = birthdayInput.value;
+    const day = birthdayDayInput?.value;
+    const month = birthdayMonthInput?.value;
 
-    if (!birthday) {
-      alert("Выберите дату рождения.");
+    if (!day || !month) {
+      alert("Выберите день и месяц рождения.");
       return;
     }
+
+    const daysInMonth =
+      new Date(2000, Number(month), 0).getDate();
+
+    if (Number(day) > daysInMonth) {
+      alert("В выбранном месяце нет такого дня.");
+      return;
+    }
+
+    // Технический високосный год нужен только для хранения.
+    // Пользователь выбирает и видит исключительно день и месяц.
+    const birthday = `2000-${month}-${day}`;
 
     try {
       localStorage.setItem("timerBirthday", birthday);
     } catch (error) {
-      console.log("Не удалось сохранить дату локально.");
+      alert("Не удалось сохранить дату. Попробуйте ещё раз.");
+      return;
     }
 
 if (birthdaySetupReturnScreen === "profileScreen") {
@@ -4183,6 +4308,26 @@ if (birthdaySetupReturnScreen === "profileScreen") {
     showMainAfterLoading();
   }
  });
+}
+
+if (cancelBirthdayButton) {
+  cancelBirthdayButton.addEventListener("click", () => {
+    birthdaySetupReturnScreen = null;
+
+    if (birthdaySetupScreen) {
+      birthdaySetupScreen.style.display = "none";
+      birthdaySetupScreen.classList.remove("active");
+    }
+
+    const bottomNav = document.getElementById("bottomNav");
+
+    if (bottomNav) {
+      bottomNav.style.display = "grid";
+    }
+
+    showScreen("profileScreen", "profile");
+    renderProfile();
+  });
 }
 
 /* ===== EVENT DETAIL ===== */
