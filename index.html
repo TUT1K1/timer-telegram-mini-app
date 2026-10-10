@@ -3500,11 +3500,11 @@ function showScreen(screenId, navName = null) {
     targetScreen.classList.add("active");
   }
 
-  document.querySelectorAll(".bottom-nav-item").forEach(item => {
-    item.classList.remove("active");
-  });
+ if (navName) {
+    document.querySelectorAll(".bottom-nav-item").forEach(item => {
+      item.classList.remove("active");
+    });
 
-  if (navName) {
     const activeNav = document.querySelector(
       `.bottom-nav-item[data-nav="${navName}"]`
     );
