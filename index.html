@@ -3398,32 +3398,15 @@ function openBirthdayTimer() {
     return;
   }
 
-  const month = Number(birthdayParts[1]);
-  const day = Number(birthdayParts[2]);
+  eventDetailReturnScreen = "homeScreen";
 
-  const timestamp = getNextEventTimestamp(month, day);
-
-  currentTimer = timestamp;
-
-  document.getElementById("eventTitle").textContent =
-    "ДО ДНЯ РОЖДЕНИЯ ОСТАЛОСЬ";
-
-  document.getElementById("eventDate").textContent =
-    formatEventDate(timestamp);
-
-  document.getElementById("homeScreen").classList.remove("active");
-  document.getElementById("customScreen").classList.remove("active");
-  document.getElementById("timerScreen").classList.add("active");
-
-  if (timerInterval) {
-    clearInterval(timerInterval);
-  }
-
-  updateTimer(currentTimer);
-
-  timerInterval = setInterval(() => {
-    updateTimer(currentTimer);
-  }, 250);
+  openEventDetail({
+    type: "birthday",
+    name: "День рождения",
+    icon: "🎂",
+    date: birthday,
+    repeatYearly: true
+  });
 }
     
 function showHomeScreen() {
@@ -5347,25 +5330,20 @@ const eventDetailBackButton =
   document.getElementById("eventDetailBackButton");
 
 if (eventDetailBackButton) {
-  eventDetailBackButton.addEventListener(
-    "click",
-    function () {
-      if (eventDetailReturnScreen === "calendarScreen") {
-        showScreen(
-          "calendarScreen",
-          "calendar"
-        );
-
-        renderCalendar();
-        return;
-      }
-
-      showScreen(
-        "customScreen",
-        "events"
-      );
+  eventDetailBackButton.addEventListener("click", function () {
+    if (eventDetailReturnScreen === "homeScreen") {
+      showHomeScreen();
+      return;
     }
-  );
+
+    if (eventDetailReturnScreen === "calendarScreen") {
+      showScreen("calendarScreen", "calendar");
+      renderCalendar();
+      return;
+    }
+
+    showScreen("customScreen", "events");
+  });
 }
 
 const eventDetailShareButton =
