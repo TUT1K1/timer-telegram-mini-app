@@ -2250,6 +2250,89 @@
   transform: scale(0.98);
 }
 
+/* ===== БЫСТРЫЕ НАСТРОЙКИ ===== */
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(28, 25, 23, 0.45);
+}
+
+.settings-overlay.open {
+  display: flex;
+}
+
+.settings-panel {
+  width: 100%;
+  max-width: 380px;
+  padding: 24px 20px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.settings-heading {
+  margin: 0 0 8px;
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.settings-description {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.settings-theme-list {
+  display: grid;
+  gap: 10px;
+}
+
+.settings-theme-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 54px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--white);
+  color: var(--text);
+  text-align: left;
+  font-weight: 800;
+}
+
+.settings-theme-button.selected {
+  outline: 2px solid var(--orange);
+  outline-offset: 1px;
+}
+
+.settings-theme-dot {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  border-radius: 50%;
+}
+
+.settings-close-button {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 20px;
+  border-radius: 15px;
+  background: var(--orange);
+  color: #fff;
+  font-weight: 900;
+}
+
   </style>
   
   <style>
@@ -3060,6 +3143,69 @@
 </nav>
 
   </main>
+
+<div id="quickSettingsModal" class="settings-overlay">
+  <div
+    class="settings-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="settingsHeading"
+  >
+    <h2 id="settingsHeading" class="settings-heading">
+      Быстрые настройки
+    </h2>
+
+    <p class="settings-description">
+      Выбери оформление приложения. Настройка сохранится автоматически.
+    </p>
+
+    <div class="settings-theme-list">
+      <button
+        class="settings-theme-button"
+        type="button"
+        data-timer-theme="orange"
+      >
+        <span
+          class="settings-theme-dot"
+          style="background:#f97316"
+        ></span>
+        Оранжевая
+      </button>
+
+      <button
+        class="settings-theme-button"
+        type="button"
+        data-timer-theme="dark"
+      >
+        <span
+          class="settings-theme-dot"
+          style="background:#292524"
+        ></span>
+        Тёмная
+      </button>
+
+      <button
+        class="settings-theme-button"
+        type="button"
+        data-timer-theme="blue"
+      >
+        <span
+          class="settings-theme-dot"
+          style="background:#2563eb"
+        ></span>
+        Синяя
+      </button>
+    </div>
+
+    <button
+      id="closeQuickSettingsButton"
+      class="settings-close-button"
+      type="button"
+    >
+      ГОТОВО
+    </button>
+  </div>
+</div>
 
   <script>
     const tg = window.Telegram?.WebApp;
@@ -5254,6 +5400,111 @@ if (eventDetailShareButton) {
     }
   );
 }
+
+/* ===== БЫСТРЫЕ НАСТРОЙКИ И ТЕМЫ ===== */
+
+(function initQuickSettings() {
+  const settingsButton =
+    document.getElementById("quickSettingsButton");
+
+  const settingsModal =
+    document.getElementById("quickSettingsModal");
+
+  const closeSettingsButton =
+    document.getElementById("closeQuickSettingsButton");
+
+  if (!settingsButton || !settingsModal || !closeSettingsButton) {
+    return;
+  }
+
+  const themes = {
+    orange: {
+      "--orange": "#f97316",
+      "--orange-dark": "#ea580c",
+      "--orange-soft": "#fff7ed",
+      "--bg": "#fff7ed",
+      "--text": "#1c1917",
+      "--muted": "#78716c",
+      "--white": "#ffffff",
+      "--border": "#fed7aa"
+    },
+    dark: {
+      "--orange": "#f97316",
+      "--orange-dark": "#ea580c",
+      "--orange-soft": "#44403c",
+      "--bg": "#1c1917",
+      "--text": "#fafaf9",
+      "--muted": "#d6d3d1",
+      "--white": "#292524",
+      "--border": "#57534e"
+    },
+    blue: {
+      "--orange": "#2563eb",
+      "--orange-dark": "#1d4ed8",
+      "--orange-soft": "#dbeafe",
+      "--bg": "#eff6ff",
+      "--text": "#172554",
+      "--muted": "#64748b",
+      "--white": "#ffffff",
+      "--border": "#bfdbfe"
+    }
+  };
+
+  function applyTimerTheme(themeName) {
+    const theme = themes[themeName] || themes.orange;
+    const root = document.documentElement;
+
+    Object.entries(theme).forEach(([property, value]) => {
+      root.style.setProperty(property, value);
+    });
+
+    document.querySelectorAll("[data-timer-theme]").forEach(button => {
+      const selected = button.dataset.timerTheme === themeName;
+
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+
+    try {
+      localStorage.setItem("timerAppTheme", themeName);
+    } catch (error) {
+      console.warn("Не удалось сохранить тему.", error);
+    }
+  }
+
+  function openSettings() {
+    settingsModal.classList.add("open");
+  }
+
+  function closeSettings() {
+    settingsModal.classList.remove("open");
+  }
+
+  settingsButton.addEventListener("click", openSettings);
+  closeSettingsButton.addEventListener("click", closeSettings);
+
+  settingsModal.addEventListener("click", event => {
+    if (event.target === settingsModal) {
+      closeSettings();
+    }
+  });
+
+  document.querySelectorAll("[data-timer-theme]").forEach(button => {
+    button.addEventListener("click", () => {
+      applyTimerTheme(button.dataset.timerTheme);
+    });
+  });
+
+  let savedTheme = "orange";
+
+  try {
+    savedTheme = localStorage.getItem("timerAppTheme") || "orange";
+  } catch (error) {
+    console.warn("Не удалось прочитать сохранённую тему.", error);
+  }
+
+  applyTimerTheme(savedTheme);
+})();
 
 try {
   startApp();
