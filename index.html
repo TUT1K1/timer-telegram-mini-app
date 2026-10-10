@@ -4246,6 +4246,7 @@ function startApp() {
 }
 
 if (saveBirthdayButton) {
+  saveBirthdayButton.addEventListener("click", () => {
     const day = birthdayDayInput?.value;
     const month = birthdayMonthInput?.value;
 
@@ -4262,52 +4263,48 @@ if (saveBirthdayButton) {
       return;
     }
 
-    // Технический високосный год нужен только для хранения.
-    // Пользователь выбирает и видит исключительно день и месяц.
     const birthday = `2000-${month}-${day}`;
 
     try {
       localStorage.setItem("timerBirthday", birthday);
     } catch (error) {
-      alert("Не удалось сохранить дату. Попробуйте ещё раз.");
+      alert("Не удалось сохранить дату рождения.");
       return;
     }
 
-if (birthdaySetupReturnScreen === "profileScreen") {
-  birthdaySetupReturnScreen = null;
+    if (birthdaySetupReturnScreen === "profileScreen") {
+      birthdaySetupReturnScreen = null;
 
-  if (birthdaySetupScreen) {
-    birthdaySetupScreen.style.display = "none";
-  }
+      if (birthdaySetupScreen) {
+        birthdaySetupScreen.style.display = "none";
+        birthdaySetupScreen.classList.remove("active");
+      }
 
-  const bottomNav =
-    document.getElementById("bottomNav");
+      const bottomNav =
+        document.getElementById("bottomNav");
 
-  if (bottomNav) {
-    bottomNav.style.display = "grid";
-  }
+      if (bottomNav) {
+        bottomNav.style.display = "grid";
+      }
 
-  showScreen(
-    "profileScreen",
-    "profile"
-  );
+      showScreen("profileScreen", "profile");
+      renderProfile();
+    } else {
+      if (birthdaySetupScreen) {
+        birthdaySetupScreen.style.display = "none";
+        birthdaySetupScreen.classList.remove("active");
+      }
 
-    renderProfile();
-  } else {
-    if (birthdaySetupScreen) {
-      birthdaySetupScreen.style.display = "none";
+      const bottomNav =
+        document.getElementById("bottomNav");
+
+      if (bottomNav) {
+        bottomNav.style.display = "grid";
+      }
+
+      showMainAfterLoading();
     }
-
-    const bottomNav =
-      document.getElementById("bottomNav");
-
-    if (bottomNav) {
-      bottomNav.style.display = "grid";
-    }
-
-    showMainAfterLoading();
-  }
- });
+  });
 }
 
 if (cancelBirthdayButton) {
@@ -4319,7 +4316,8 @@ if (cancelBirthdayButton) {
       birthdaySetupScreen.classList.remove("active");
     }
 
-    const bottomNav = document.getElementById("bottomNav");
+    const bottomNav =
+      document.getElementById("bottomNav");
 
     if (bottomNav) {
       bottomNav.style.display = "grid";
