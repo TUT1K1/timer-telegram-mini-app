@@ -631,7 +631,7 @@
 
 .birthday-date-row {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 10px;
   width: 100%;
 }
@@ -654,7 +654,7 @@
 .birthday-actions .secondary-button {
   min-width: 0;
   width: 100%;
-  min-height: 54px;
+  min-height: 60px;
   padding: 10px;
   border-radius: 18px;
   font-size: 14px;
@@ -4500,12 +4500,6 @@ function formatCustomEventDate(event) {
 let currentCalendarTab = "nearest";
 
 const calendarHolidays = [
-  {
-    name: "Новый год",
-    month: 1,
-    day: 1,
-    icon: "🎄"
-  },
   {
     name: "Рождество",
     month: 1,
