@@ -5387,18 +5387,178 @@ const eventDetailShareButton =
   document.getElementById("eventDetailShareButton");
 
 if (eventDetailShareButton) {
-  eventDetailShareButton.addEventListener(
-    "click",
-    function () {
-      if (!currentEventDetail) {
-        return;
+  eventDetailShareButton.addEventListener("click", async function () {
+    if (!currentEventDetail) {
+      return;
+    }
+
+    const button = eventDetailShareButton;
+    const originalText = button.textContent;
+
+    button.disabled = true;
+    button.textContent = "СОЗДАЁМ КАРТОЧКУ…";
+
+    try {
+      const event = currentEventDetail;
+      const eventName = event.name || "Моё событие";
+      const eventIcon = event.icon || getEventIcon(eventName);
+
+      const days = document.getElementById(
+        "eventDetailDaysNumber"
+      )?.textContent || "0";
+
+      const hours = document.getElementById(
+        "eventDetailHours"
+      )?.textContent || "00";
+
+      const minutes = document.getElementById(
+        "eventDetailMinutes"
+      )?.textContent || "00";
+
+      const seconds = document.getElementById(
+        "eventDetailSeconds"
+      )?.textContent || "00";
+
+      const eventDate = document.getElementById(
+        "eventDetailDate"
+      )?.textContent || "";
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1350;
+
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        throw new Error("Не удалось создать изображение.");
       }
 
-      alert(
-        "Генерацию картинки для публикации добавим следующим этапом."
+      ctx.fillStyle = "#fff7ed";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#f97316";
+      ctx.beginPath();
+      ctx.roundRect(55, 55, 970, 1240, 54);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+
+      ctx.font = "800 34px Arial";
+      ctx.fillText("ТАЙМЕР | TIMER", 540, 145);
+
+      ctx.font = "100px Arial";
+      ctx.fillText(eventIcon, 540, 320);
+
+      ctx.font = "900 58px Arial";
+
+      const words = eventName.split(/\s+/);
+      const lines = [];
+      let line = "";
+
+      for (const word of words) {
+        const testLine = line ? line + " " + word : word;
+
+        if (ctx.measureText(testLine).width > 850 && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = testLine;
+        }
+      }
+
+      if (line) {
+        lines.push(line);
+      }
+
+      const visibleLines = lines.slice(0, 2);
+      visibleLines.forEach((text, index) => {
+        ctx.fillText(text, 540, 430 + index * 70);
+      });
+
+      ctx.font = "600 32px Arial";
+      ctx.fillText("ДО СОБЫТИЯ ОСТАЛОСЬ", 540, 625);
+
+      ctx.font = "900 180px Arial";
+      ctx.fillText(days, 540, 830);
+
+      ctx.font = "800 42px Arial";
+      ctx.fillText(
+        Number(days) === 1 ? "ДЕНЬ" :
+        [2, 3, 4].includes(Number(days) % 10) &&
+        ![12, 13, 14].includes(Number(days) % 100) ? "ДНЯ" : "ДНЕЙ",
+        540,
+        895
       );
+
+      ctx.font = "700 39px Arial";
+      ctx.fillText(
+        `${hours} ч   ${minutes} мин   ${seconds} сек`,
+        540,
+        1000
+      );
+
+      ctx.font = "600 32px Arial";
+      ctx.fillText("ДАТА СОБЫТИЯ", 540, 1110);
+
+      ctx.font = "800 42px Arial";
+      ctx.fillText(eventDate, 540, 1175);
+
+      ctx.font = "600 25px Arial";
+      ctx.fillText("Каждый день приближает к важному", 540, 1240);
+
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob(result => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(new Error("Не удалось подготовить изображение."));
+          }
+        }, "image/png");
+      });
+
+      const file = new File(
+        [blob],
+        "timer-event.png",
+        { type: "image/png" }
+      );
+
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({ files: [file] })
+      ) {
+        await navigator.share({
+          title: eventName,
+          text: `До события «${eventName}» осталось ${days} дней!`,
+          files: [file]
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "timer-event.png";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+        alert(
+          "Карточка создана. Если загрузка не началась, попробуй ещё раз."
+        );
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Ошибка создания карточки:", error);
+        alert("Не удалось создать карточку. Попробуй ещё раз.");
+      }
+    } finally {
+      button.disabled = false;
+      button.textContent = originalText;
     }
-  );
+  });
 }
 
 /* ===== БЫСТРЫЕ НАСТРОЙКИ И ТЕМЫ ===== */
