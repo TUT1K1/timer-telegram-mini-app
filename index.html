@@ -1363,18 +1363,19 @@
 .about-description {
   display: block;
   width: 100%;
-  max-width: none;
+  max-width: 100%;
   box-sizing: border-box;
-
   margin: 0;
   text-align: left;
-
   font-size: 15px;
   line-height: 1.6;
-
   white-space: normal;
   overflow-wrap: break-word;
   word-break: normal;
+}
+
+.about-description + .about-description {
+  margin-top: 16px;
 }
 
 .about-section-title {
@@ -3290,7 +3291,7 @@
     <div class="about-version">Версия 1.0</div>
 
     <p class="about-description">
-      Timer помогает следить за временем до важных событий:
+      Таймер помогает следить за временем до важных событий:
       праздников, дней рождения и личных дат.
     </p>
 
