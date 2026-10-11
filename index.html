@@ -512,6 +512,17 @@
 .channel-button:active {
   background: var(--white);
 }
+
+.home-community-links {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.home-community-links .channel-button {
+  text-decoration: none;
+}
+
 /* ===== ЭКРАН ЗАГРУЗКИ И ПЕРВЫЙ ЗАПУСК ===== */
 
 .loading-screen {
@@ -2494,7 +2505,29 @@
       </div>
     </div>
 
-    <div class="streak-arrow">→</div>
+  <div class="streak-arrow">→</div>
+  </div>
+
+  <div class="home-community-links">
+    <a
+      class="channel-button"
+      href="https://t.me/timer_new"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span>Наш канал</span>
+      <span>↗</span>
+    </a>
+
+    <a
+      class="channel-button"
+      href="https://t.me/co_op_chat"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span>Наш чат</span>
+      <span>↗</span>
+    </a>
   </div>
 
   </section>
