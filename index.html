@@ -1297,6 +1297,170 @@
 
 }
 
+/* ===== ABOUT APP SCREEN ===== */
+
+.about-screen {
+  padding: 24px 16px 110px;
+}
+
+.about-screen-header {
+  margin-bottom: 22px;
+}
+
+.about-kicker {
+  margin-bottom: 5px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  color: var(--orange);
+}
+
+.about-title {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.1;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.about-card {
+  padding: 20px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--white);
+  box-shadow: 0 7px 20px rgba(120, 72, 32, 0.06);
+}
+
+.about-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  border-radius: 20px;
+  background: var(--orange-soft);
+  font-size: 32px;
+}
+
+.about-app-name {
+  margin: 0;
+  text-align: center;
+  font-size: 21px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.about-version {
+  margin-top: 5px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.about-description {
+  margin: 18px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.about-section-title {
+  margin: 22px 0 12px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.about-links {
+  padding: 4px 14px;
+}
+
+.about-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 0;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.about-link + .about-link {
+  border-top: 1px solid var(--border);
+}
+
+.about-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 14px;
+  background: var(--orange-soft);
+  font-size: 21px;
+}
+
+.about-link-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.about-link-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.about-link-description {
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.about-link-arrow {
+  flex: 0 0 auto;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--orange);
+}
+
+.about-back-button {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--orange);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.about-back-button:active {
+  transform: scale(0.98);
+}
+
+.about-footer {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
 /* ===== CUSTOM EVENTS SCREEN ===== */
 
 .custom-screen {
@@ -3073,8 +3237,11 @@
 
     </div>
 
-    <div class="profile-row">
-
+    <button
+      class="profile-row"
+      id="aboutAppButton"
+      type="button"
+    >
       <div class="profile-row-icon">ℹ️</div>
 
       <div class="profile-row-content">
@@ -3087,12 +3254,97 @@
         </div>
       </div>
 
-    </div>
+      <div class="profile-row-arrow">→</div>
+    </button>
 
   </div>
 
   <p class="profile-note">
     Ваши таймеры и события остаются частью вашего личного пространства.
+  </p>
+
+</section>
+
+<section id="aboutScreen" class="screen about-screen">
+
+  <div class="about-screen-header">
+    <div class="about-kicker">ТАЙМЕР | TIMER</div>
+    <h2 class="about-title">О ПРИЛОЖЕНИИ</h2>
+  </div>
+
+  <div class="about-card">
+
+    <div class="about-logo">⏱️</div>
+
+    <h3 class="about-app-name">Таймер | Timer</h3>
+
+    <div class="about-version">Версия 1.0</div>
+
+    <p class="about-description">
+      Timer помогает следить за временем до важных событий:
+      праздников, дней рождения и личных дат.
+    </p>
+
+    <p class="about-description">
+      Создавай собственные события, проверяй даты в календаре,
+      выбирай оформление и делись красивыми карточками
+      обратного отсчёта.
+    </p>
+
+  </div>
+
+  <div class="about-section-title">НАШИ СООБЩЕСТВА</div>
+
+  <div class="about-card about-links">
+
+    <a
+      class="about-link"
+      href="https://t.me/timer_new"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span class="about-link-icon">📢</span>
+
+      <span class="about-link-content">
+        <span class="about-link-title">Канал Timer</span>
+        <span class="about-link-description">
+          Новости и обновления приложения
+        </span>
+      </span>
+
+      <span class="about-link-arrow">↗</span>
+    </a>
+
+    <a
+      class="about-link"
+      href="https://t.me/co_op_chat"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span class="about-link-icon">💬</span>
+
+      <span class="about-link-content">
+        <span class="about-link-title">Чат Timer</span>
+        <span class="about-link-description">
+          Общение и предложения по развитию
+        </span>
+      </span>
+
+      <span class="about-link-arrow">↗</span>
+    </a>
+
+  </div>
+
+  <button
+    class="about-back-button"
+    id="aboutBackButton"
+    type="button"
+  >
+    ← НАЗАД В ПРОФИЛЬ
+  </button>
+
+  <p class="about-footer">
+    Ваше время начинается здесь.
   </p>
 
 </section>
@@ -3865,6 +4117,25 @@ if (profileBirthdayButton) {
     }
 
     showBirthdayEditScreen();
+  });
+}
+
+const aboutAppButton =
+  document.getElementById("aboutAppButton");
+
+const aboutBackButton =
+  document.getElementById("aboutBackButton");
+
+if (aboutAppButton) {
+  aboutAppButton.addEventListener("click", () => {
+    showScreen("aboutScreen");
+  });
+}
+
+if (aboutBackButton) {
+  aboutBackButton.addEventListener("click", () => {
+    showScreen("profileScreen", "profile");
+    renderProfile();
   });
 }
 
