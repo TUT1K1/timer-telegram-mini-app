@@ -5730,14 +5730,14 @@ if (eventDetailShareButton) {
       ctx.fillStyle = "#fff7ed";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Декоративные круги на фоне
+      // Мягкие декоративные круги за карточкой
       ctx.fillStyle = "rgba(249, 115, 22, 0.10)";
       ctx.beginPath();
-      ctx.arc(60, 170, 130, 0, Math.PI * 2);
+      ctx.arc(30, 160, 135, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(1020, 1160, 180, 0, Math.PI * 2);
+      ctx.arc(1050, 1190, 175, 0, Math.PI * 2);
       ctx.fill();
 
       // Основная белая карточка
@@ -5746,38 +5746,82 @@ if (eventDetailShareButton) {
       ctx.roundRect(48, 48, 984, 1254, 48);
       ctx.fill();
 
-      // Оранжевая верхняя часть
-      ctx.fillStyle = "#f97316";
+      // Цельная оранжевая шапка
+      ctx.save();
       ctx.beginPath();
       ctx.roundRect(72, 72, 936, 300, 36);
-      ctx.fill();
+      ctx.clip();
 
-      // Белая область под шапкой
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(72, 300, 936, 36);
+      ctx.fillStyle = "#f97316";
+      ctx.fillRect(72, 72, 936, 300);
 
-      // Декоративные элементы в шапке
-      ctx.fillStyle = "rgba(255, 255, 255, 0.13)";
+      // Декоративные круги внутри шапки
+      ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
       ctx.beginPath();
       ctx.arc(900, 125, 95, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(170, 315, 72, 0, Math.PI * 2);
+      ctx.arc(160, 330, 78, 0, Math.PI * 2);
       ctx.fill();
+
+      ctx.restore();
 
       // Название приложения
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
+
       ctx.fillStyle = "#ffffff";
       ctx.font = "800 34px Arial";
-      ctx.fillText("ТАЙМЕР | TIMER", 540, 132);
+      ctx.fillText("ТАЙМЕР | TIMER", 540, 125);
 
-      // Иконка события
-      ctx.font = "100px Arial";
-      ctx.fillText(eventIcon, 540, 252);
+      // Подложка для фирменного логотипа
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(540, 255, 66, 0, Math.PI * 2);
+      ctx.fill();
 
-      // Название события с переносом длинных строк
+      // Логотип песочных часов, нарисованный средствами Canvas
+      ctx.strokeStyle = "#f97316";
+      ctx.lineWidth = 8;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      // Верхняя и нижняя перекладины
+      ctx.beginPath();
+      ctx.moveTo(510, 218);
+      ctx.lineTo(570, 218);
+      ctx.moveTo(510, 292);
+      ctx.lineTo(570, 292);
+      ctx.stroke();
+
+      // Контур песочных часов
+      ctx.beginPath();
+      ctx.moveTo(516, 220);
+      ctx.bezierCurveTo(516, 238, 531, 242, 540, 255);
+      ctx.bezierCurveTo(549, 268, 564, 272, 564, 290);
+      ctx.moveTo(564, 220);
+      ctx.bezierCurveTo(564, 238, 549, 242, 540, 255);
+      ctx.bezierCurveTo(531, 268, 516, 272, 516, 290);
+      ctx.stroke();
+
+      // Песок внутри логотипа
+      ctx.fillStyle = "#f97316";
+      ctx.beginPath();
+      ctx.moveTo(528, 231);
+      ctx.lineTo(552, 231);
+      ctx.lineTo(540, 247);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(528, 279);
+      ctx.lineTo(552, 279);
+      ctx.lineTo(540, 266);
+      ctx.closePath();
+      ctx.fill();
+
+      // Название события
       ctx.fillStyle = "#1f2937";
       ctx.font = "800 56px Arial";
 
@@ -5825,16 +5869,16 @@ if (eventDetailShareButton) {
 
       // Количество дней
       ctx.fillStyle = "#f97316";
-      ctx.font = "900 190px Arial";
-      ctx.fillText(String(days), 540, 700);
+      ctx.font = "900 180px Arial";
+      ctx.fillText(String(days), 540, 680);
 
-      // Правильное склонение: день, дня, дней
+      // Правильное склонение
       ctx.fillStyle = "#374151";
-      ctx.font = "800 40px Arial";
+      ctx.font = "800 38px Arial";
       ctx.fillText(
         getRussianDaysWord(Number(days)).toUpperCase(),
         540,
-        775
+        770
       );
 
       // Подложка для часов, минут и секунд
