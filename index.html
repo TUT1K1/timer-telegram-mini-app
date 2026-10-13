@@ -1354,6 +1354,7 @@
 
 .about-version {
   margin-top: 5px;
+  margin-bottom: 18px;
   text-align: center;
   font-size: 12px;
   font-weight: 700;
@@ -5723,79 +5724,169 @@ if (eventDetailShareButton) {
         throw new Error("Не удалось создать изображение.");
       }
 
+      // ===== НОВЫЙ ДИЗАЙН КАРТОЧКИ TIMER =====
+
+      // Фон изображения
       ctx.fillStyle = "#fff7ed";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "#f97316";
+      // Декоративные круги на фоне
+      ctx.fillStyle = "rgba(249, 115, 22, 0.10)";
       ctx.beginPath();
-      ctx.roundRect(55, 55, 970, 1240, 54);
+      ctx.arc(60, 170, 130, 0, Math.PI * 2);
       ctx.fill();
 
+      ctx.beginPath();
+      ctx.arc(1020, 1160, 180, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Основная белая карточка
       ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.roundRect(48, 48, 984, 1254, 48);
+      ctx.fill();
+
+      // Оранжевая верхняя часть
+      ctx.fillStyle = "#f97316";
+      ctx.beginPath();
+      ctx.roundRect(72, 72, 936, 300, 36);
+      ctx.fill();
+
+      // Белая область под шапкой
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(72, 300, 936, 36);
+
+      // Декоративные элементы в шапке
+      ctx.fillStyle = "rgba(255, 255, 255, 0.13)";
+      ctx.beginPath();
+      ctx.arc(900, 125, 95, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(170, 315, 72, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Название приложения
       ctx.textAlign = "center";
-
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#ffffff";
       ctx.font = "800 34px Arial";
-      ctx.fillText("ТАЙМЕР | TIMER", 540, 145);
+      ctx.fillText("ТАЙМЕР | TIMER", 540, 132);
 
+      // Иконка события
       ctx.font = "100px Arial";
-      ctx.fillText(eventIcon, 540, 320);
+      ctx.fillText(eventIcon, 540, 252);
 
-      ctx.font = "900 58px Arial";
+      // Название события с переносом длинных строк
+      ctx.fillStyle = "#1f2937";
+      ctx.font = "800 56px Arial";
 
-      const words = eventName.split(/\s+/);
-      const lines = [];
-      let line = "";
+      const words = String(eventName).trim().split(/\s+/);
+      const titleLines = [];
+      let currentLine = "";
 
       for (const word of words) {
-        const testLine = line ? line + " " + word : word;
+        const testLine = currentLine
+          ? currentLine + " " + word
+          : word;
 
-        if (ctx.measureText(testLine).width > 850 && line) {
-          lines.push(line);
-          line = word;
+        if (
+          ctx.measureText(testLine).width > 820 &&
+          currentLine
+        ) {
+          titleLines.push(currentLine);
+          currentLine = word;
         } else {
-          line = testLine;
+          currentLine = testLine;
         }
       }
 
-      if (line) {
-        lines.push(line);
+      if (currentLine) {
+        titleLines.push(currentLine);
       }
 
-      const visibleLines = lines.slice(0, 2);
-      visibleLines.forEach((text, index) => {
-        ctx.fillText(text, 540, 430 + index * 70);
+      const visibleTitleLines = titleLines.slice(0, 3);
+      const titleStartY =
+        visibleTitleLines.length === 1 ? 425 :
+        visibleTitleLines.length === 2 ? 405 : 385;
+
+      visibleTitleLines.forEach((titleLine, index) => {
+        ctx.fillText(
+          titleLine,
+          540,
+          titleStartY + index * 66
+        );
       });
 
-      ctx.font = "600 32px Arial";
-      ctx.fillText("ДО СОБЫТИЯ ОСТАЛОСЬ", 540, 625);
+      // Подпись над обратным отсчётом
+      ctx.fillStyle = "#9a3412";
+      ctx.font = "800 28px Arial";
+      ctx.fillText("ДО СОБЫТИЯ ОСТАЛОСЬ", 540, 570);
 
-      ctx.font = "900 180px Arial";
-      ctx.fillText(days, 540, 830);
+      // Количество дней
+      ctx.fillStyle = "#f97316";
+      ctx.font = "900 190px Arial";
+      ctx.fillText(String(days), 540, 700);
 
-      ctx.font = "800 42px Arial";
+      // Правильное склонение: день, дня, дней
+      ctx.fillStyle = "#374151";
+      ctx.font = "800 40px Arial";
       ctx.fillText(
-        Number(days) === 1 ? "ДЕНЬ" :
-        [2, 3, 4].includes(Number(days) % 10) &&
-        ![12, 13, 14].includes(Number(days) % 100) ? "ДНЯ" : "ДНЕЙ",
+        getRussianDaysWord(Number(days)).toUpperCase(),
         540,
-        895
+        775
       );
 
-      ctx.font = "700 39px Arial";
+      // Подложка для часов, минут и секунд
+      ctx.fillStyle = "#fff7ed";
+      ctx.beginPath();
+      ctx.roundRect(130, 825, 820, 92, 26);
+      ctx.fill();
+
+      ctx.fillStyle = "#9a3412";
+      ctx.font = "700 34px Arial";
       ctx.fillText(
         `${hours} ч   ${minutes} мин   ${seconds} сек`,
         540,
-        1000
+        871
       );
 
-      ctx.font = "600 32px Arial";
-      ctx.fillText("ДАТА СОБЫТИЯ", 540, 1110);
+      // Разделитель
+      ctx.strokeStyle = "#fed7aa";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(150, 970);
+      ctx.lineTo(930, 970);
+      ctx.stroke();
 
+      // Дата события
+      ctx.fillStyle = "#9ca3af";
+      ctx.font = "800 25px Arial";
+      ctx.fillText("ДАТА СОБЫТИЯ", 540, 1020);
+
+      ctx.fillStyle = "#1f2937";
       ctx.font = "800 42px Arial";
-      ctx.fillText(eventDate, 540, 1175);
+      ctx.fillText(String(eventDate), 540, 1080);
 
-      ctx.font = "600 25px Arial";
-      ctx.fillText("Каждый день приближает к важному", 540, 1240);
+      // Нижняя часть карточки
+      ctx.fillStyle = "#f97316";
+      ctx.beginPath();
+      ctx.roundRect(130, 1140, 820, 76, 24);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 27px Arial";
+      ctx.fillText(
+        "Каждый день приближает к важному",
+        540,
+        1178
+      );
+
+      ctx.fillStyle = "#9ca3af";
+      ctx.font = "700 20px Arial";
+      ctx.fillText("ТВОЁ ВРЕМЯ — ТВОЙ МОМЕНТ", 540, 1260);
+
+      // ===== КОНЕЦ НОВОГО ДИЗАЙНА =====
 
       const blob = await new Promise((resolve, reject) => {
         canvas.toBlob(result => {
@@ -5820,7 +5911,7 @@ if (eventDetailShareButton) {
       ) {
         await navigator.share({
           title: eventName,
-          text: `До события «${eventName}» осталось ${days} дней!`,
+          text: `До события «${eventName}» осталось ${days} ${getRussianDaysWord(Number(days))}!`,
           files: [file]
         });
       } else {
